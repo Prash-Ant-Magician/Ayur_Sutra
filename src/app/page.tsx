@@ -1,14 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { ArrowRight, LayoutDashboard, LogIn, Stethoscope, Users } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { Logo } from "@/components/layout/logo";
 
 export default function Home() {
-  const heroImage = PlaceHolderImages.find(img => img.id === 'landing-hero');
-
   return (
     <div className="flex flex-col min-h-screen">
       <header className="absolute inset-x-0 top-0 z-50">
@@ -34,58 +30,17 @@ export default function Home() {
           <div className="overflow-hidden">
             <div className="mx-auto max-w-7xl px-6 pb-32 pt-36 sm:pt-60 lg:px-8 lg:pt-32">
               <div className="mx-auto max-w-2xl gap-x-14 lg:mx-0 lg:flex lg:max-w-none lg:items-center">
-                <div className="w-full max-w-xl lg:shrink-0 xl:max-w-2xl">
+                <div className="w-full max-w-xl lg:shrink-0 xl:max-w-2xl text-center lg:text-left mx-auto">
                   <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-6xl font-headline">
                     Harmonizing Health, Simplifying Care.
                   </h1>
-                  <p className="relative mt-6 text-lg leading-8 text-muted-foreground sm:max-w-md lg:max-w-none">
+                  <p className="relative mt-6 text-lg leading-8 text-muted-foreground sm:max-w-md lg:max-w-none mx-auto lg:mx-0">
                     Welcome to AyurSutra, your integrated platform for holistic wellness. Seamlessly manage therapy schedules, track your healing journey, and receive personalized care every step of the way.
                   </p>
-                  <div className="mt-10 flex items-center gap-x-6">
+                  <div className="mt-10 flex items-center gap-x-6 justify-center lg:justify-start">
                     <Button asChild size="lg">
                       <Link href="/dashboard/patient/schedule">Book a Therapy Session</Link>
                     </Button>
-                  </div>
-                </div>
-                <div className="mt-14 flex justify-end gap-8 sm:-mt-44 sm:justify-start sm:pl-20 lg:mt-0 lg:pl-0">
-                  <div className="ml-auto w-44 flex-none space-y-8 pt-32 sm:ml-0 sm:pt-80 lg:order-last lg:pt-36 xl:order-none xl:pt-80">
-                    <div className="relative">
-                      {heroImage && (
-                        <Image
-                          src={heroImage.imageUrl}
-                          alt={heroImage.description}
-                          data-ai-hint={heroImage.imageHint}
-                          className="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg"
-                          width={600}
-                          height={900}
-                        />
-                      )}
-                      <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-gray-900/10" />
-                    </div>
-                  </div>
-                  <div className="mr-auto w-44 flex-none space-y-8 sm:mr-0 sm:pt-52 lg:pt-36">
-                    <div className="relative">
-                       <Image
-                          src="https://picsum.photos/seed/2/600/900"
-                          alt="Calm therapy session"
-                          data-ai-hint="calm therapy"
-                          className="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg"
-                          width={600}
-                          height={900}
-                        />
-                      <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-gray-900/10" />
-                    </div>
-                    <div className="relative">
-                       <Image
-                          src="https://picsum.photos/seed/3/600/400"
-                          alt="Natural herbs and oils"
-                          data-ai-hint="natural herbs"
-                          className="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg"
-                          width={600}
-                          height={400}
-                        />
-                      <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-gray-900/10" />
-                    </div>
                   </div>
                 </div>
               </div>
