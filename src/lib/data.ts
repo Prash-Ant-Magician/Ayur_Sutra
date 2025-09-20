@@ -102,7 +102,27 @@ export const appointments: Appointment[] = [
     therapyType: 'Abhyanga',
     status: 'Completed',
   },
+  // Adding today's appointments for practitioner dashboard
+  {
+    id: 'apt4',
+    patientId: 'p2',
+    practitionerId: 'pr1',
+    date: new Date().toISOString().split('T')[0],
+    time: '11:00 AM',
+    therapyType: 'Shirodhara',
+    status: 'Scheduled',
+  },
+  {
+    id: 'apt5',
+    patientId: 'p3',
+    practitionerId: 'pr1',
+    date: new Date().toISOString().split('T')[0],
+    time: '03:00 PM',
+    therapyType: 'Panchakarma',
+    status: 'Scheduled',
+  },
 ];
+
 
 export const notifications: Notification[] = [
   {

@@ -16,7 +16,7 @@ export default function LoginPage() {
                 <Card>
                     <CardHeader className="text-center">
                         <CardTitle className="font-headline text-2xl">Welcome Back</CardTitle>
-                        <CardDescription>Select a user to simulate login.</CardDescription>
+                        <CardDescription>Enter your credentials to access your account.</CardDescription>
                     </CardHeader>
                     <CardContent>
                         <LoginForm users={users} />

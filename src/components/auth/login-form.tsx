@@ -4,6 +4,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useRouter } from "next/navigation";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "@/lib/firebase";
+import { patients, practitioners, admins } from "@/lib/data";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -14,18 +17,13 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import type { User } from "@/lib/types";
 
 const formSchema = z.object({
-  userId: z.string().min(1, { message: "Please select a user to log in." }),
+  email: z.string().email({ message: "Please enter a valid email." }),
+  password: z.string().min(8, { message: "Password cannot be empty." }),
 });
 
 export function LoginForm({ users }: { users: User[] }) {
@@ -35,39 +33,57 @@ export function LoginForm({ users }: { users: User[] }) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      userId: "",
+      email: "",
+      password: "",
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    const user = users.find((u) => u.id === values.userId);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, values.email, values.password);
+      const loggedInUser = userCredential.user;
 
-    if (user) {
-      toast({
-        title: "Login Successful",
-        description: `Redirecting to ${user.role} dashboard...`,
-      });
+      // This is a simplified way to determine role for the demo.
+      // In a real app, this would be handled by a custom claim or a database lookup.
+      const allUsers = [...patients, ...practitioners, ...admins];
+      const user = allUsers.find(u => u.email === loggedInUser.email);
 
-      // Simulate a network request
-      setTimeout(() => {
-        switch (user.role) {
-          case "patient":
-            router.push("/dashboard/patient");
-            break;
-          case "practitioner":
-            router.push("/dashboard/practitioner");
-            break;
-          case "admin":
-            router.push("/dashboard/admin");
-            break;
-          default:
-            router.push("/dashboard");
-        }
-      }, 1000);
-    } else {
+      if (user) {
+        toast({
+          title: "Login Successful",
+          description: `Redirecting to ${user.role} dashboard...`,
+        });
+
+        setTimeout(() => {
+          switch (user.role) {
+            case "patient":
+              router.push("/dashboard/patient");
+              break;
+            case "practitioner":
+              router.push("/dashboard/practitioner");
+              break;
+            case "admin":
+              router.push("/dashboard/admin");
+              break;
+            default:
+              router.push("/dashboard");
+          }
+        }, 1000);
+      } else {
+        // This case handles users who signed up but are not in the static data.
+        // We'll default them to the patient dashboard.
+        toast({
+          title: "Login Successful",
+          description: `Redirecting to dashboard...`,
+        });
+        setTimeout(() => {
+          router.push("/dashboard/patient");
+        }, 1000);
+      }
+    } catch (error: any) {
         toast({
             title: "Login Failed",
-            description: "User not found.",
+            description: error.message,
             variant: "destructive"
         })
     }
@@ -75,34 +91,45 @@ export function LoginForm({ users }: { users: User[] }) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <FormField
           control={form.control}
-          name="userId"
+          name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Simulate Login As</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a user role to log in" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {users.map((user) => (
-                    <SelectItem key={user.id} value={user.id}>
-                      <div className="flex items-center gap-2">
-                        <span>{user.name}</span>
-                        <span className="text-xs text-muted-foreground capitalize">({user.role})</span>
-                      </div>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input placeholder="you@example.com" {...field} />
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Password</FormLabel>
+              <FormControl>
+                <Input type="password" placeholder="********" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <p className="text-sm text-muted-foreground pt-2">
+            <strong>Demo logins:</strong>
+            <br />
+            Patient: <code className="font-mono">alice@example.com</code>
+            <br />
+            Practitioner: <code className="font-mono">e.reed@ayursutra.com</code>
+            <br />
+            Admin: <code className="font-mono">admin@ayursutra.com</code>
+            <br />
+            Password for all is <code className="font-mono">password123</code>. Or, sign up with a new account.
+          </p>
+
         <Button type="submit" className="w-full">
           Login
         </Button>
