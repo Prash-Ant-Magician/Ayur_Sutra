@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowRight, ChevronDown, LayoutDashboard, LogIn, Stethoscope, Users } from "lucide-react";
+import { ArrowRight, ChevronDown, LayoutDashboard, LogIn, Stethoscope, Users, Bot, CalendarCheck, FileText } from "lucide-react";
 import Link from "next/link";
 import { Logo } from "@/components/layout/logo";
 import {
@@ -13,6 +13,26 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export default function Home() {
+  const features = [
+    {
+      icon: CalendarCheck,
+      title: "Effortless Scheduling",
+      description: "Patients can easily book and manage appointments with practitioners through an intuitive calendar interface.",
+      role: "Patient"
+    },
+    {
+      icon: FileText,
+      title: "Personalized Care Plans",
+      description: "Practitioners can create and assign detailed, personalized therapy plans for each patient.",
+      role: "Practitioner"
+    },
+    {
+      icon: Bot,
+      title: "AI-Powered Assistance",
+      description: "Both patients and practitioners benefit from AI tools for suggestions, precautions, and support.",
+      role: "AI Feature"
+    }
+  ];
   return (
     <div className="flex flex-col min-h-screen">
       <header className="absolute inset-x-0 top-0 z-50">
@@ -92,71 +112,34 @@ export default function Home() {
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
             <div className="mx-auto max-w-2xl lg:text-center">
               <p className="mt-2 text-3xl font-bold tracking-tight text-foreground sm:text-4xl font-headline">
-                Dedicated Portals for Every Role
+                A Seamless Experience for Everyone
               </p>
               <p className="mt-6 text-lg leading-8 text-muted-foreground">
-                Access tailored features and tools designed for your specific needs within the AyurSutra ecosystem.
+                Our platform is designed to provide a tailored and intuitive experience for patients, practitioners, and administrators alike.
               </p>
             </div>
             <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
               <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-                
-                <Card className="hover:shadow-lg transition-shadow">
-                  <CardHeader>
-                    <div className="flex items-center gap-4">
-                      <div className="bg-primary/20 p-3 rounded-full">
-                        <Users className="h-6 w-6 text-primary" />
+                {features.map((feature, index) => (
+                  <Card key={index} className="hover:shadow-lg transition-shadow">
+                    <CardHeader>
+                      <div className="flex items-center gap-4">
+                        <div className="bg-primary/20 p-3 rounded-full">
+                          <feature.icon className="h-6 w-6 text-primary" />
+                        </div>
+                        <div>
+                          <CardTitle className="font-headline text-xl">{feature.title}</CardTitle>
+                           <p className="text-sm font-semibold text-primary">{feature.role}</p>
+                        </div>
                       </div>
-                      <CardTitle className="font-headline">Patient Portal</CardTitle>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <CardDescription className="mb-4">
-                      Manage your appointments, track your therapy progress, and connect with our AI assistant for support.
-                    </CardDescription>
-                    <Button variant="outline" asChild>
-                      <Link href="/dashboard/patient">Access Portal <ArrowRight className="ml-2 h-4 w-4" /></Link>
-                    </Button>
-                  </CardContent>
-                </Card>
-
-                <Card className="hover:shadow-lg transition-shadow">
-                  <CardHeader>
-                    <div className="flex items-center gap-4">
-                      <div className="bg-primary/20 p-3 rounded-full">
-                        <Stethoscope className="h-6 w-6 text-primary" />
-                      </div>
-                      <CardTitle className="font-headline">Practitioner Portal</CardTitle>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <CardDescription className="mb-4">
-                      View your schedule, manage patient data, and utilize AI-powered tools to create personalized therapy plans.
-                    </CardDescription>
-                    <Button variant="outline" asChild>
-                      <Link href="/dashboard/practitioner">Access Portal <ArrowRight className="ml-2 h-4 w-4" /></Link>
-                    </Button>
-                  </CardContent>
-                </Card>
-
-                <Card className="hover:shadow-lg transition-shadow">
-                  <CardHeader>
-                    <div className="flex items-center gap-4">
-                      <div className="bg-primary/20 p-3 rounded-full">
-                        <LayoutDashboard className="h-6 w-6 text-primary" />
-                      </div>
-                      <CardTitle className="font-headline">Admin Dashboard</CardTitle>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <CardDescription className="mb-4">
-                      Oversee all platform activities, manage users, and view system analytics and configurations.
-                    </CardDescription>
-                    <Button variant="outline" asChild>
-                      <Link href="/dashboard/admin">Access Dashboard <ArrowRight className="ml-2 h-4 w-4" /></Link>
-                    </Button>
-                  </CardContent>
-                </Card>
+                    </CardHeader>
+                    <CardContent>
+                      <CardDescription>
+                        {feature.description}
+                      </CardDescription>
+                    </CardContent>
+                  </Card>
+                ))}
               </div>
             </div>
           </div>
