@@ -36,8 +36,6 @@ export default function Home() {
     }
   ];
 
-  const heroImage = placeholderImages.placeholderImages.find(p => p.id === 'landing-hero');
-
   return (
     <div className="flex flex-col min-h-screen">
       <header className="absolute inset-x-0 top-0 z-50">
@@ -107,23 +105,6 @@ export default function Home() {
                       <Link href="/dashboard/patient/schedule">Book a Therapy Session</Link>
                     </Button>
                   </div>
-                </div>
-                <div className="mt-14 flex justify-end gap-8 sm:-mt-44 sm:justify-start sm:pl-20 lg:mt-0 lg:pl-0">
-                    <div className="ml-auto w-44 flex-none space-y-8 pt-32 sm:ml-0 sm:pt-80 lg:order-last lg:pt-36 xl:order-none xl:pt-80">
-                        <div className="relative">
-                        {heroImage && (
-                            <Image
-                                src={heroImage.imageUrl}
-                                alt={heroImage.description}
-                                width={600}
-                                height={900}
-                                className="aspect-[2/3] w-full rounded-xl bg-gray-900/5 object-cover shadow-lg"
-                                data-ai-hint={heroImage.imageHint}
-                            />
-                        )}
-                        <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-gray-900/10" />
-                        </div>
-                    </div>
                 </div>
               </div>
             </div>
