@@ -1,8 +1,16 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowRight, LayoutDashboard, LogIn, Stethoscope, Users } from "lucide-react";
+import { ArrowRight, ChevronDown, LayoutDashboard, LogIn, Stethoscope, Users } from "lucide-react";
 import Link from "next/link";
 import { Logo } from "@/components/layout/logo";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export default function Home() {
   return (
@@ -16,11 +24,43 @@ export default function Home() {
             </Link>
           </div>
            <div className="flex lg:flex-1 lg:justify-end">
-            <Button asChild variant="ghost">
-              <Link href="/login">
-                Log in <LogIn className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline">
+                  View Portals
+                  <ChevronDown className="ml-2 h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuLabel>Dedicated Portals</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link href="/dashboard/patient">
+                    <Users className="mr-2 h-4 w-4" />
+                    Patient Portal
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/dashboard/practitioner">
+                    <Stethoscope className="mr-2 h-4 w-4" />
+                    Practitioner Portal
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/dashboard/admin">
+                    <LayoutDashboard className="mr-2 h-4 w-4" />
+                    Admin Dashboard
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link href="/login">
+                    <LogIn className="mr-2 h-4 w-4" />
+                    Log In
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </nav>
       </header>
