@@ -43,7 +43,7 @@ export default function Home() {
                   </p>
                   <div className="mt-10 flex items-center gap-x-6">
                     <Button asChild size="lg">
-                      <Link href="/dashboard/patient">Get Started</Link>
+                      <Link href="/dashboard/patient/schedule">Book a Therapy Session</Link>
                     </Button>
                   </div>
                 </div>
