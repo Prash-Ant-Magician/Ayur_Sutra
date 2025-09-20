@@ -11,7 +11,7 @@ export function Logo(props: SVGProps<SVGSVGElement>) {
     >
       <path fill="none" d="M0 0h256v256H0z" />
       <path
-        d="M168.3 192.3a48.2 48.2 0 0 1-80.6 0 48 48 0 0 1-28.2-56.9 48.2 48.2 0 0 1 68.1-15.6 48.2 48.2 0 0 1 68.1 15.6 48 48 0 0 1-27.4 56.9Z"
+        d="M160 216a80 80 0 0 1-64-128.8C114.3 55.3 128 32 128 32s13.7 23.3 32 55.2A80 80 0 0 1 160 216Z"
         fill="none"
         stroke="currentColor"
         strokeLinecap="round"
@@ -19,7 +19,7 @@ export function Logo(props: SVGProps<SVGSVGElement>) {
         strokeWidth="16"
       />
       <path
-        d="M128 119.7v-84a48 48 0 0 1 48 48"
+        d="M128 32s-40 40-40 88a40 40 0 0 0 80 0c0-48-40-88-40-88Z"
         fill="none"
         stroke="currentColor"
         strokeLinecap="round"
