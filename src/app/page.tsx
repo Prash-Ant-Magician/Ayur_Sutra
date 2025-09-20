@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
-import { ArrowRight, LayoutDashboard, Stethoscope, Users } from "lucide-react";
+import { ArrowRight, LayoutDashboard, LogIn, Stethoscope, Users } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Logo } from "@/components/layout/logo";
@@ -18,6 +18,13 @@ export default function Home() {
               <Logo className="h-8 w-auto text-primary" />
               <span className="font-headline text-2xl font-bold text-foreground">AyurSutra</span>
             </Link>
+          </div>
+           <div className="flex lg:flex-1 lg:justify-end">
+            <Button asChild variant="ghost">
+              <Link href="/login">
+                Log in <LogIn className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
           </div>
         </nav>
       </header>
