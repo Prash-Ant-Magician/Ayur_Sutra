@@ -65,6 +65,19 @@ export function SignupForm() {
         role: values.role,
       });
 
+      if (values.role === 'practitioner') {
+        const practitionerDocRef = doc(db, "practitioners", user.uid);
+        await setDoc(practitionerDocRef, {
+          id: user.uid,
+          name: values.name,
+          email: values.email,
+          role: 'practitioner',
+          avatar: `https://picsum.photos/seed/${user.uid}/200/200`,
+          lastLogin: new Date().toISOString(),
+          specialty: 'Ayurvedic Medicine', // Default specialty
+        });
+      }
+
       toast({
         title: "Signup Successful",
         description: "Redirecting to the login page...",
