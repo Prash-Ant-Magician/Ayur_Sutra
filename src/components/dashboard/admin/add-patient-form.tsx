@@ -108,9 +108,13 @@ export function AddPatientForm() {
     } finally {
         setIsLoading(false);
         // Note: The admin will be signed out after creating a user. This is a limitation
-        // of using the client-side SDK for user creation. They will need to log back in.
-        // A better solution involves a backend function.
+        // of using the client-side SDK for user creation. A better solution involves a backend function.
         await auth.signOut();
+        toast({
+            title: "Admin Signed Out",
+            description: "You have been signed out for security. Please log in again.",
+            duration: 8000,
+        });
         router.push('/login');
     }
   }

@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useForm } from "react-hook-form";
@@ -81,13 +82,12 @@ export function AddPractitionerForm() {
       router.refresh();
       // The sign-out and redirect below are necessary due to client-side SDK limitations.
       await auth.signOut();
-      router.push('/login');
-      toast({
+       toast({
         title: "Admin Signed Out",
-        description: "You have been signed out for security reasons. Please log back in.",
+        description: "You have been signed out for security. Please log in again.",
         duration: 8000,
       });
-
+      router.push('/login');
     } catch (error: any) {
        toast({
         title: "Creation Failed",

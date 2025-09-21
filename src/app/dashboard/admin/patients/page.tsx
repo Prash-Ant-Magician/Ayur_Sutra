@@ -26,7 +26,7 @@ export default async function AdminPatientsPage() {
         name: data.name,
         email: data.email,
         avatar: `https://picsum.photos/seed/${doc.id}/200/200`,
-        dob: data.dob ? format(data.dob.toDate(), "yyyy-MM-dd") : 'N/A',
+        dob: data.dob?.toDate ? format(data.dob.toDate(), "PPP") : 'N/A',
         gender: data.gender || 'N/A',
      }
   });
