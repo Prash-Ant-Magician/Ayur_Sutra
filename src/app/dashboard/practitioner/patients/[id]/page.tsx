@@ -1,11 +1,11 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { patients } from "@/lib/data";
 import { notFound } from "next/navigation";
 import { PrecautionGenerator } from "@/components/dashboard/practitioner/precaution-generator";
 import { TherapySuggester } from "@/components/dashboard/practitioner/therapy-suggester";
 import { Cake, HeartPulse, Stethoscope, User } from "lucide-react";
+import { PatientProgressChart } from "@/components/dashboard/practitioner/patient-progress-chart";
 
 export default function PatientDetailPage({ params }: { params: { id: string } }) {
   const patient = patients.find(p => p.id === params.id);
@@ -39,31 +39,36 @@ export default function PatientDetailPage({ params }: { params: { id: string } }
         </div>
       </div>
       
-      <div className="grid gap-8 lg:grid-cols-2">
-        <div>
-            <Card>
-                <CardHeader>
-                    <CardTitle className="font-headline">Patient Information</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                     <div>
-                        <h4 className="font-semibold flex items-center gap-2"><HeartPulse className="h-4 w-4 text-primary"/>Medical History</h4>
-                        <p className="text-muted-foreground ml-6">{patient.medicalHistory}</p>
-                    </div>
-                     <div>
-                        <h4 className="font-semibold flex items-center gap-2"><Stethoscope className="h-4 w-4 text-primary"/>Current Symptoms</h4>
-                        <p className="text-muted-foreground ml-6">{patient.symptoms}</p>
-                    </div>
-                     <div>
-                        <h4 className="font-semibold flex items-center gap-2"><User className="h-4 w-4 text-primary"/>Current Therapies</h4>
-                        <p className="text-muted-foreground ml-6">{patient.currentTherapies}</p>
-                    </div>
-                </CardContent>
-            </Card>
+      <div className="grid gap-8">
+        <div className="grid gap-8 lg:grid-cols-2">
+          <div>
+              <Card>
+                  <CardHeader>
+                      <CardTitle className="font-headline">Patient Information</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                       <div>
+                          <h4 className="font-semibold flex items-center gap-2"><HeartPulse className="h-4 w-4 text-primary"/>Medical History</h4>
+                          <p className="text-muted-foreground ml-6">{patient.medicalHistory}</p>
+                      </div>
+                       <div>
+                          <h4 className="font-semibold flex items-center gap-2"><Stethoscope className="h-4 w-4 text-primary"/>Current Symptoms</h4>
+                          <p className="text-muted-foreground ml-6">{patient.symptoms}</p>
+                      </div>
+                       <div>
+                          <h4 className="font-semibold flex items-center gap-2"><User className="h-4 w-4 text-primary"/>Current Therapies</h4>
+                          <p className="text-muted-foreground ml-6">{patient.currentTherapies}</p>
+                      </div>
+                  </CardContent>
+              </Card>
+          </div>
+          <div className="space-y-8">
+            <TherapySuggester profile={patientProfile} />
+            <PrecautionGenerator patient={patient} />
+          </div>
         </div>
-        <div className="space-y-8">
-          <TherapySuggester profile={patientProfile} />
-          <PrecautionGenerator patient={patient} />
+        <div>
+          <PatientProgressChart patient={patient} />
         </div>
       </div>
     </div>
