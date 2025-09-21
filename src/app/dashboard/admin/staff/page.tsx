@@ -14,6 +14,7 @@ import Link from "next/link"
 import { collection, getDocs, query, where } from "firebase/firestore"
 import { db } from "@/lib/firebase"
 import { Practitioner } from "@/lib/types"
+import { PlusCircle } from "lucide-react"
 
 export default async function AdminStaffPage() {
   const practitionersQuery = query(collection(db, "practitioners"));
@@ -22,7 +23,14 @@ export default async function AdminStaffPage() {
 
   return (
     <div className="container mx-auto py-8">
-      <h1 className="text-3xl font-bold font-headline mb-8">Staff Management</h1>
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold font-headline">Staff Management</h1>
+        <Button asChild>
+          <Link href="/dashboard/admin/add-practitioner">
+            <PlusCircle className="mr-2 h-4 w-4" /> Add New Practitioner
+          </Link>
+        </Button>
+      </div>
       <Card>
         <CardHeader>
           <CardTitle>All Therapists & Staff</CardTitle>

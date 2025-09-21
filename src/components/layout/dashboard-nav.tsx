@@ -48,6 +48,7 @@ const adminLinks = [
   { href: '/dashboard/admin', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/dashboard/admin/book-appointment', label: 'Book Appointment', icon: BookMarked },
   { href: '/dashboard/admin/add-patient', label: 'Add Patient', icon: UserPlus },
+  { href: '/dashboard/admin/add-practitioner', label: 'Add Practitioner', icon: UserPlus },
   { href: '/dashboard/admin/patients', label: 'Patients', icon: Users },
   { href: '/dashboard/admin/staff', label: 'Therapists/Staff', icon: Users },
   { href: '/dashboard/admin/reports', label: 'Reports & Analytics', icon: BarChart },
