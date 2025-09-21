@@ -8,9 +8,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
-
+import Link from "next/link";
 import type { User, Patient, Practitioner, Appointment } from "@/lib/types";
-import { Search, Bell } from "lucide-react";
+import { Search, Bell, PlusCircle } from "lucide-react";
 import { format } from "date-fns";
 
 type AdminDashboardClientProps = {
@@ -53,8 +53,13 @@ export function AdminDashboardClient({
   return (
     <div className="flex flex-col h-screen bg-background">
       {/* Header */}
-      <header className="flex items-center justify-between p-4 border-b">
-        <div className="relative w-full max-w-sm">
+      <header className="flex items-center justify-between p-4 border-b gap-4">
+        <Button asChild size="sm">
+          <Link href="/dashboard/admin/book-appointment">
+            <PlusCircle className="mr-2 h-4 w-4" /> Book Appointment
+          </Link>
+        </Button>
+        <div className="relative w-full max-w-sm ml-auto">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input placeholder="Search..." className="pl-9 bg-card" />
         </div>
@@ -62,7 +67,7 @@ export function AdminDashboardClient({
           <Button variant="ghost" size="icon">
             <Bell className="h-5 w-5" />
           </Button>
-          <span className="text-sm text-muted-foreground">{format(new Date(), "EEEE, MMMM dd, yyyy")}</span>
+          <span className="text-sm text-muted-foreground whitespace-nowrap">{format(new Date(), "EEEE, MMMM dd, yyyy")}</span>
           <div className="flex items-center gap-2">
             <Avatar className="h-8 w-8">
               <AvatarImage src="https://picsum.photos/seed/avatar6/200/200" alt="Admin" />
@@ -175,14 +180,19 @@ export function AdminDashboardClient({
         <section>
             <h2 className="text-xl font-semibold mb-4">Therapy Type Distribution</h2>
             <Card>
+                <CardHeader>
+                    <CardTitle>Therapy Popularity</CardTitle>
+                    <CardDescription>Distribution of different therapy types booked.</CardDescription>
+                </CardHeader>
                 <CardContent className="flex items-center">
                     <ChartContainer config={chartConfig} className="w-1/2 h-64">
                         <ResponsiveContainer width="100%" height="100%">
                         <PieChart>
+                             <ChartTooltip content={<ChartTooltipContent nameKey="name" />} />
                             <Pie data={therapyTypeData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} fill="#8884d8" labelLine={false}>
                                 {therapyTypeData.map((entry, index) => <Cell key={`cell-${index}`} fill={entry.color} />)}
                             </Pie>
-                            <ChartTooltip content={<ChartTooltipContent nameKey="name" />} />
+                           
                         </PieChart>
                         </ResponsiveContainer>
                     </ChartContainer>

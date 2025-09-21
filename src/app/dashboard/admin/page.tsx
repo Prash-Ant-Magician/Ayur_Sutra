@@ -4,9 +4,6 @@ import { db } from "@/lib/firebase";
 import { Appointment, Patient, Practitioner } from "@/lib/types";
 import { collection, getDocs, limit, orderBy, query, where } from "firebase/firestore";
 import { format } from 'date-fns';
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { PlusCircle } from "lucide-react";
 
 export default async function AdminPage() {
   // Fetch practitioners
@@ -68,13 +65,6 @@ export default async function AdminPage() {
 
   return (
     <>
-      <div className="absolute top-6 right-8">
-        <Button asChild>
-          <Link href="/dashboard/admin/book-appointment">
-            <PlusCircle className="mr-2 h-4 w-4" /> Book Appointment
-          </Link>
-        </Button>
-      </div>
       <AdminDashboardClient 
         stats={stats}
         upcomingAppointments={upcomingAppointments}
