@@ -1,11 +1,9 @@
 import { LoginForm } from "@/components/auth/login-form";
 import { Logo } from "@/components/layout/logo";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { admins, patients, practitioners } from "@/lib/data";
 import Link from "next/link";
 
 export default function LoginPage() {
-    const users = [...patients, ...practitioners, ...admins];
     return (
         <div className="min-h-screen flex items-center justify-center bg-background p-4">
             <div className="w-full max-w-md">
@@ -19,7 +17,7 @@ export default function LoginPage() {
                         <CardDescription>Enter your credentials to access your account.</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <LoginForm users={users} />
+                        <LoginForm />
                         <div className="mt-4 text-center text-sm">
                             Don&apos;t have an account?{' '}
                             <Link href="/signup" className="underline">

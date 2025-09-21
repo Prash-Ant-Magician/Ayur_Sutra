@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowRight, ChevronDown, LayoutDashboard, LogIn, Stethoscope, Users, Bot, CalendarCheck, FileText } from "lucide-react";
+import { ArrowRight, ChevronDown, LayoutDashboard, LogIn, Stethoscope, Users, Bot, CalendarCheck, FileText, UserPlus } from "lucide-react";
 import Link from "next/link";
 import { Logo } from "@/components/layout/logo";
 import {
@@ -11,8 +11,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import Image from "next/image";
-import placeholderImages from "@/lib/placeholder-images.json";
 
 export default function Home() {
   const features = [
@@ -101,8 +99,11 @@ export default function Home() {
                     Welcome to AyurSutra, your integrated platform for holistic wellness. Seamlessly manage therapy schedules, track your healing journey, and receive personalized care every step of the way.
                   </p>
                   <div className="mt-10 flex items-center gap-x-6 justify-center lg:justify-start">
+                    <Button asChild size="lg" variant="outline">
+                      <Link href="/login"><LogIn className="mr-2 h-4 w-4" />Log In</Link>
+                    </Button>
                     <Button asChild size="lg">
-                      <Link href="/dashboard/patient/schedule">Book a Therapy Session</Link>
+                      <Link href="/signup"><UserPlus className="mr-2 h-4 w-4" />Sign Up</Link>
                     </Button>
                   </div>
                 </div>
