@@ -1,154 +1,207 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowRight, ChevronDown, LayoutDashboard, LogIn, Stethoscope, Users, Bot, CalendarCheck, FileText, UserPlus } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { ArrowRight, Facebook, Twitter, Instagram } from "lucide-react";
 import Link from "next/link";
 import { Logo } from "@/components/layout/logo";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import Image from "next/image";
+
+function LeafIcon(props: React.SVGProps<SVGSVGElement>) {
+    return (
+        <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M11 20A7 7 0 0 1 4 13H2a10 10 0 0 0 10 10z" />
+            <path d="M12 2a7 7 0 0 1 7 7h2a10 10 0 0 0-10-10z" />
+        </svg>
+    )
+}
+
+function DropletIcon(props: React.SVGProps<SVGSVGElement>) {
+    return (
+        <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z" />
+        </svg>
+    )
+}
+
+function PersonStandingIcon(props: React.SVGProps<SVGSVGElement>) {
+    return (
+        <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="5" r="1" />
+            <path d="m9 20 3-6 3 6" />
+            <path d="m6 8 6 2 6-2" />
+            <path d="M12 10v4" />
+        </svg>
+    )
+}
+
+const patientFeatures = [
+    { icon: "📅", title: "Easy Appointment Booking" },
+    { icon: "📜", title: "Personalized Therapy Plans" },
+    { icon: "📊", title: "Patient History at Glance" },
+];
+
+const therapistFeatures = [
+    { icon: "🗓️", title: "Manage Daily Itinerary" },
+    { icon: "⚙️", title: "Streamlined Operations" },
+];
+
 
 export default function Home() {
-  const features = [
-    {
-      icon: CalendarCheck,
-      title: "Effortless Scheduling",
-      description: "Patients can easily book and manage appointments with practitioners through an intuitive calendar interface.",
-      role: "Patient"
-    },
-    {
-      icon: FileText,
-      title: "Personalized Care Plans",
-      description: "Practitioners can create and assign detailed, personalized therapy plans for each patient.",
-      role: "Practitioner"
-    },
-    {
-      icon: Bot,
-      title: "AI-Powered Assistance",
-      description: "Both patients and practitioners benefit from AI tools for suggestions, precautions, and support.",
-      role: "AI Feature"
-    }
-  ];
-
   return (
-    <div className="flex flex-col min-h-screen">
-      <header className="absolute inset-x-0 top-0 z-50">
-        <nav className="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
-          <div className="flex lg:flex-1">
-            <Link href="/" className="-m-1.5 p-1.5 flex items-center gap-2">
-              <Logo className="h-8 w-auto text-primary" />
-              <span className="font-headline text-2xl font-bold text-foreground">AyurSutra</span>
-            </Link>
+    <div className="flex flex-col min-h-screen bg-background">
+      <header className="sticky top-0 z-50 bg-card shadow-sm">
+        <div className="container mx-auto flex items-center justify-between p-4">
+          <Link href="/" className="flex items-center gap-2">
+            <Logo className="h-8 w-auto text-primary" />
+            <span className="font-headline text-2xl font-bold text-foreground">Ayur Sutra</span>
+          </Link>
+          <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
+            <Link href="/services" className="text-muted-foreground hover:text-primary">Services</Link>
+            <Link href="/about" className="text-muted-foreground hover:text-primary">About Us</Link>
+            <Link href="/testimonials" className="text-muted-foreground hover:text-primary">Testimonials</Link>
+            <Link href="/contact" className="text-muted-foreground hover:text-primary">Contact</Link>
+          </nav>
+          <div className="flex items-center gap-2">
+            <Button variant="outline" size="sm">Login with Google</Button>
+            <Button size="sm" asChild>
+                <Link href="/login">Login / Sign Up</Link>
+            </Button>
           </div>
-           <div className="flex lg:flex-1 lg:justify-end">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline">
-                  View Portals
-                  <ChevronDown className="ml-2 h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuLabel>Dedicated Portals</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <Link href="/dashboard/patient">
-                    <Users className="mr-2 h-4 w-4" />
-                    Patient Portal
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/dashboard/practitioner">
-                    <Stethoscope className="mr-2 h-4 w-4" />
-                    Practitioner Portal
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/dashboard/admin">
-                    <LayoutDashboard className="mr-2 h-4 w-4" />
-                    Admin Dashboard
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <Link href="/login">
-                    <LogIn className="mr-2 h-4 w-4" />
-                    Log In
-                  </Link>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        </nav>
+        </div>
       </header>
 
       <main className="flex-1">
-        <div className="relative isolate">
-          <div className="overflow-hidden">
-            <div className="mx-auto max-w-7xl px-6 pb-32 pt-36 sm:pt-60 lg:px-8 lg:pt-32">
-              <div className="mx-auto max-w-2xl gap-x-14 lg:mx-0 lg:flex lg:max-w-none lg:items-center">
-                <div className="w-full max-w-xl lg:shrink-0 xl:max-w-2xl text-center lg:text-left mx-auto">
-                  <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-6xl font-headline">
-                    Harmonizing Health, Simplifying Care.
-                  </h1>
-                  <p className="relative mt-6 text-lg leading-8 text-muted-foreground sm:max-w-md lg:max-w-none mx-auto lg:mx-0">
-                    Welcome to AyurSutra, your integrated platform for holistic wellness. Seamlessly manage therapy schedules, track your healing journey, and receive personalized care every step of the way.
-                  </p>
-                  <div className="mt-10 flex items-center gap-x-6 justify-center lg:justify-start">
-                    <Button asChild size="lg" variant="outline">
-                      <Link href="/login"><LogIn className="mr-2 h-4 w-4" />Log In</Link>
-                    </Button>
-                    <Button asChild size="lg">
-                      <Link href="/signup"><UserPlus className="mr-2 h-4 w-4" />Sign Up</Link>
-                    </Button>
-                  </div>
-                </div>
-              </div>
+        {/* Hero Section */}
+        <section className="relative h-[600px] bg-primary/90 text-primary-foreground">
+            <Image
+                src="https://picsum.photos/seed/spa-bg/1200/600"
+                alt="Ayurvedic treatment"
+                fill
+                className="object-cover z-0"
+                data-ai-hint="serene spa"
+            />
+            <div className="absolute inset-0 bg-primary/70 z-10" />
+            <div className="relative container mx-auto flex flex-col items-start justify-center h-full z-20 text-left">
+                <p className="font-semibold text-lg">Ayurveda</p>
+                <h1 className="text-4xl md:text-6xl font-bold font-headline leading-tight max-w-2xl">
+                    Discover Holistic Wellness with Ayur Sutra Panchakarma
+                </h1>
+                <p className="mt-4 max-w-lg text-lg">
+                    Effortlessly manage your Ayurvedic treatments and appointments.
+                </p>
+                <Button size="lg" className="mt-8 bg-accent text-accent-foreground hover:bg-accent/90">
+                    Schedule Your Therapy
+                </Button>
             </div>
-          </div>
-        </div>
+        </section>
 
-        <div className="bg-card py-24 sm:py-32">
-          <div className="mx-auto max-w-7xl px-6 lg:px-8">
-            <div className="mx-auto max-w-2xl lg:text-center">
-              <p className="mt-2 text-3xl font-bold tracking-tight text-foreground sm:text-4xl font-headline">
-                A Seamless Experience for Everyone
-              </p>
-              <p className="mt-6 text-lg leading-8 text-muted-foreground">
-                Our platform is designed to provide a tailored and intuitive experience for patients, practitioners, and administrators alike.
-              </p>
-            </div>
-            <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
-              <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-                {features.map((feature, index) => (
-                  <Card key={index} className="hover:shadow-lg transition-shadow">
-                    <CardHeader>
-                      <div className="flex items-center gap-4">
-                        <div className="bg-primary/20 p-3 rounded-full">
-                          <feature.icon className="h-6 w-6 text-primary" />
+        <section className="bg-background py-16 -mt-20 relative z-30">
+            <div className="container mx-auto">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                    <div className="flex flex-col items-center">
+                        <div className="p-4 border-2 border-primary rounded-full">
+                            <LeafIcon className="h-8 w-8 text-primary" />
                         </div>
-                        <div>
-                          <CardTitle className="font-headline text-xl">{feature.title}</CardTitle>
-                           <p className="text-sm font-semibold text-primary">{feature.role}</p>
+                        <h3 className="mt-4 text-xl font-semibold">Detoxification</h3>
+                    </div>
+                    <div className="flex flex-col items-center">
+                         <div className="p-4 border-2 border-primary rounded-full">
+                            <DropletIcon className="h-8 w-8 text-primary" />
                         </div>
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      <CardDescription>
-                        {feature.description}
-                      </CardDescription>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
+                        <h3 className="mt-4 text-xl font-semibold">Stress Relief</h3>
+                    </div>
+                    <div className="flex flex-col items-center">
+                         <div className="p-4 border-2 border-primary rounded-full">
+                           <PersonStandingIcon className="h-8 w-8 text-primary" />
+                        </div>
+                        <h3 className="mt-4 text-xl font-semibold">Rejuvenation</h3>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
+        </section>
+
+        {/* Key Features Section */}
+        <section className="py-24 bg-muted">
+            <div className="container mx-auto">
+                <h2 className="text-3xl font-bold font-headline text-center mb-12">Key Features</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
+                    <div>
+                        <h3 className="text-2xl font-semibold text-center mb-6">For Patients</h3>
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                            {patientFeatures.map(feature => (
+                                <Card key={feature.title} className="text-center p-6 bg-card">
+                                    <div className="text-4xl mb-2">{feature.icon}</div>
+                                    <p className="font-semibold">{feature.title}</p>
+                                </Card>
+                            ))}
+                        </div>
+                    </div>
+                    <div>
+                        <h3 className="text-2xl font-semibold text-center mb-6">For Therapists</h3>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            {therapistFeatures.map(feature => (
+                                <Card key={feature.title} className="text-center p-6 bg-card">
+                                    <div className="text-4xl mb-2">{feature.icon}</div>
+                                    <p className="font-semibold">{feature.title}</p>
+                                </Card>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        {/* Testimonials */}
+        <section className="py-24 bg-background">
+            <div className="container mx-auto text-center">
+                <h2 className="text-3xl font-bold font-headline mb-4">What Our Patients Say</h2>
+                <div className="max-w-3xl mx-auto">
+                    <Card className="p-8 bg-card">
+                        <div className="flex items-center gap-4">
+                            <Image src="https://picsum.photos/seed/patient-avatar/80/80" alt="Patient" width={80} height={80} className="rounded-full" data-ai-hint="person portrait"/>
+                            <div>
+                                <blockquote className="text-lg italic text-left">
+                                    "Ayur Sutra changed my life. The personalized care and attention to detail are unmatched. I've never felt better."
+                                </blockquote>
+                                <p className="text-right font-semibold mt-4">- Ayur Batra</p>
+                            </div>
+                        </div>
+                    </Card>
+                </div>
+            </div>
+        </section>
       </main>
+
+      <footer className="bg-primary text-primary-foreground py-12">
+        <div className="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div>
+                <h3 className="font-bold text-lg mb-4">Quick Links</h3>
+                <ul className="space-y-2">
+                    <li><Link href="/about" className="hover:underline">About Us</Link></li>
+                    <li><Link href="/services" className="hover:underline">Services</Link></li>
+                    <li><Link href="/contact" className="hover:underline">Contact</Link></li>
+                    <li><Link href="#" className="hover:underline">Privacy Policy</Link></li>
+                </ul>
+            </div>
+            <div>
+                <h3 className="font-bold text-lg mb-4">Follow Us</h3>
+                <div className="flex gap-4">
+                    <Link href="#" aria-label="Facebook"><Facebook /></Link>
+                    <Link href="#" aria-label="Twitter"><Twitter /></Link>
+                    <Link href="#" aria-label="Instagram"><Instagram /></Link>
+                </div>
+            </div>
+            <div className="md:col-span-2 text-right">
+                 <Button asChild className="bg-accent text-accent-foreground hover:bg-accent/90">
+                    <Link href="/dashboard/patient/schedule">
+                       Schedule an Appointment <ArrowRight className="ml-2"/>
+                    </Link>
+                 </Button>
+            </div>
+        </div>
+        <div className="container mx-auto text-center mt-8 border-t border-primary-foreground/20 pt-4">
+            <p className="text-sm text-primary-foreground/80">&copy; {new Date().getFullYear()} Ayur Sutra. All rights reserved.</p>
+        </div>
+      </footer>
     </div>
   );
 }
