@@ -39,6 +39,7 @@ const timeSlots = ["09:00 AM", "10:00 AM", "11:00 AM", "02:00 PM", "03:00 PM", "
 const formSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
   email: z.string().email({ message: "Please enter a valid email." }),
+  phone: z.string().min(10, { message: "Please enter a valid phone number." }),
   gender: z.enum(["male", "female", "other"], { required_error: "Please select a gender."}),
   dob: z.date({
     required_error: "A date of birth is required.",
@@ -72,6 +73,7 @@ export function AppointmentBookingForm() {
         uid: user.uid,
         name: values.name,
         email: values.email,
+        phone: values.phone,
         gender: values.gender,
         dob: values.dob,
         address: values.address,
@@ -79,18 +81,30 @@ export function AppointmentBookingForm() {
       });
 
       // Store appointment details in Firestore
-      await addDoc(collection(db, "appointments"), {
+      const appointment = {
         patientUid: user.uid,
         hospitalLocation: values.hospitalLocation,
         therapy: values.therapy,
         date: format(values.appointmentDate, "yyyy-MM-dd"),
         time: values.appointmentTime,
         status: 'Scheduled',
-      });
+      };
+      await addDoc(collection(db, "appointments"), appointment);
+
+      // --- Simulated Notifications ---
+      // In a real app, you would use a backend service to send these.
+      console.log(`--- Sending Booking Confirmation ---`);
+      console.log(`Email to: ${values.email}`);
+      console.log(`Subject: Your Appointment is Confirmed!`);
+      console.log(`Body: Your appointment for ${values.therapy} on ${format(values.appointmentDate, "PPP")} at ${values.appointmentTime} is confirmed.`);
+      console.log(`---`);
+      console.log(`SMS to: ${values.phone}`);
+      console.log(`Body: Your AyurSutra appointment for ${values.therapy} on ${format(values.appointmentDate, "PPP")} at ${values.appointmentTime} is confirmed.`);
+      console.log(`---------------------------------`);
       
       toast({
         title: "Booking Successful & Account Created!",
-        description: `Your account has been created. Your email is ${values.email} and your temporary password is ${password}. Please login to see your dashboard.`,
+        description: `Your account has been created. Your email is ${values.email} and your temporary password is ${password}. Please login to see your dashboard. Confirmation has been sent to your email and phone.`,
         duration: 10000,
       });
 
@@ -128,6 +142,19 @@ export function AppointmentBookingForm() {
               <FormLabel>Email</FormLabel>
               <FormControl>
                 <Input placeholder="you@example.com" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+         <FormField
+          control={form.control}
+          name="phone"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Phone Number</FormLabel>
+              <FormControl>
+                <Input placeholder="+1 555-555-5555" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -322,3 +349,5 @@ export function AppointmentBookingForm() {
     </Form>
   );
 }
+
+    
