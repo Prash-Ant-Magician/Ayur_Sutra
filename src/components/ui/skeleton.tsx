@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils"
+import { Card, CardContent, CardHeader } from "./card"
 
 function Skeleton({
   className,

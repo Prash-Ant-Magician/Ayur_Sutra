@@ -16,6 +16,7 @@ type PatientDashboardClientProps = {
 export function PatientDashboardClient({ therapyProgress, upcomingAppointments, pastAppointments, practitioners }: PatientDashboardClientProps) {
   
   const getPractitionerName = (practitionerId: string) => {
+    // Note: In a real app with more practitioners, consider a more efficient way to look this up.
     return practitioners.find(p => p.id === practitionerId)?.name || "N/A";
   };
 
