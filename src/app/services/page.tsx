@@ -11,38 +11,38 @@ const services = [
   {
     title: "Panchakarma",
     description: "A comprehensive detoxification and rejuvenation program designed to cleanse the body of toxins and restore balance. It involves a series of five therapeutic treatments.",
-    image: "https://picsum.photos/seed/panchakarma/400/300",
-    imageHint: "ayurvedic therapy"
+    image: "https://picsum.photos/seed/therapy-detox/400/300",
+    imageHint: "detox therapy"
   },
   {
     title: "Abhyanga",
     description: "A full-body massage using warm, herb-infused oils. This therapy helps to improve circulation, soothe the nervous system, and nourish the skin.",
-    image: "https://picsum.photos/seed/abhyanga/400/300",
+    image: "https://picsum.photos/seed/oil-massage/400/300",
     imageHint: "oil massage"
   },
   {
     title: "Shirodhara",
     description: "A unique therapy where a continuous stream of warm oil is gently poured over the forehead. It is profoundly relaxing and beneficial for stress and anxiety.",
-    image: "https://picsum.photos/seed/shirodhara/400/300",
-    imageHint: "forehead oil"
+    image: "https://picsum.photos/seed/wellness-relax/400/300",
+    imageHint: "wellness relaxation"
   },
   {
     title: "Herbal Steam (Swedana)",
     description: "An herbal steam bath that helps to open up the body's channels, flush out toxins, and relieve muscle stiffness.",
-    image: "https://picsum.photos/seed/swedana/400/300",
+    image: "https://picsum.photos/seed/herbal-steam/400/300",
     imageHint: "herbal steam"
   },
    {
     title: "Yoga & Meditation",
     description: "Guided sessions to harmonize the mind, body, and spirit. Suitable for all levels, these practices complement our Ayurvedic treatments.",
-    image: "https://picsum.photos/seed/yoga/400/300",
-    imageHint: "yoga meditation"
+    image: "https://picsum.photos/seed/yoga-pose/400/300",
+    imageHint: "yoga pose"
   },
    {
     title: "Diet & Lifestyle Counseling",
     description: "Personalized guidance on diet, nutrition, and daily routines based on your unique constitution (Prakriti) to promote long-term health.",
-    image: "https://picsum.photos/seed/diet/400/300",
-    imageHint: "healthy food"
+    image: "https://picsum.photos/seed/healthy-eating/400/300",
+    imageHint: "healthy eating"
   },
 ];
 
