@@ -35,7 +35,7 @@ export function DashboardCharts({ data }: DashboardChartsProps) {
             axisLine={false}
           />
           <YAxis />
-          <Tooltip content={<ChartTooltipContent />} />
+          <Tooltip content={<ChartTooltipContent hideLabel />} />
           <Legend />
           <Bar dataKey="total" fill="var(--color-total)" radius={4} />
           <Bar dataKey="waiting" fill="var(--color-waiting)" radius={4} />

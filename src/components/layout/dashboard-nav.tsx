@@ -9,23 +9,24 @@ import {
   SidebarMenuButton,
   SidebarContent,
   SidebarFooter,
+  SidebarGroup,
 } from '@/components/ui/sidebar';
 import {
-  Bot,
-  Calendar,
-  HeartPulse,
   LayoutDashboard,
-  LifeBuoy,
-  LogOut,
-  Settings,
-  User,
+  Calendar,
   Users,
+  HeartPulse,
+  BarChart,
+  Settings,
+  LogOut,
+  User,
+  LifeBuoy,
+  Bot,
   Bell
 } from 'lucide-react';
 import { Logo } from './logo';
-import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Button } from '../ui/button';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '../ui/dropdown-menu';
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const patientLinks = [
   { href: '/dashboard/patient', label: 'Dashboard', icon: LayoutDashboard },
@@ -42,8 +43,10 @@ const practitionerLinks = [
 
 const adminLinks = [
   { href: '/dashboard/admin', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '#', label: 'User Management', icon: Users },
-  { href: '#', label: 'System Config', icon: Settings },
+  { href: '/dashboard/practitioner/patients', label: 'Patients', icon: Users },
+  { href: '/dashboard/practitioner', label: 'Therapists/Staff', icon: Users },
+  { href: '#', label: 'Reports & Analytics', icon: BarChart },
+  { href: '#', label: 'Settings', icon: Settings },
 ];
 
 export function DashboardNav() {
@@ -53,7 +56,7 @@ export function DashboardNav() {
     if (pathname.startsWith('/dashboard/patient')) return 'patient';
     if (pathname.startsWith('/dashboard/practitioner')) return 'practitioner';
     if (pathname.startsWith('/dashboard/admin')) return 'admin';
-    return null;
+    return 'admin'; // Default to admin for the purpose of this view
   };
 
   const role = getRole();
@@ -68,7 +71,7 @@ export function DashboardNav() {
   const getUsername = () => {
     if (role === 'patient') return 'Alice Johnson';
     if (role === 'practitioner') return 'Dr. Evelyn Reed';
-    if (role === 'admin') return 'Admin User';
+    if (role === 'admin') return 'Admin';
     return 'User';
   }
 
@@ -81,21 +84,24 @@ export function DashboardNav() {
 
   return (
     <>
-      <SidebarHeader>
-        <Link href="/" className="flex items-center gap-2">
-          <Logo className="w-8 h-8 text-primary" />
-          <span className="text-xl font-semibold font-headline">AyurSutra</span>
-        </Link>
+      <SidebarHeader className="h-20 p-4">
+        <div className="flex items-center gap-3">
+          <Logo className="w-10 h-10 text-sidebar-foreground" />
+          <div>
+            <p className="text-xl font-semibold font-headline text-sidebar-foreground">Ayur Sutra</p>
+            <p className="text-sm text-sidebar-foreground/80">Admin</p>
+          </div>
+        </div>
       </SidebarHeader>
 
-      <SidebarContent>
+      <SidebarContent className="p-4">
         <SidebarMenu>
           {links.map((link) => (
             <SidebarMenuItem key={link.href}>
               <Link href={link.href} passHref>
                 <SidebarMenuButton
                   isActive={pathname === link.href}
-                  className="font-headline"
+                  className="font-headline text-base"
                 >
                   <link.icon className="h-5 w-5" />
                   <span>{link.label}</span>
@@ -106,44 +112,13 @@ export function DashboardNav() {
         </SidebarMenu>
       </SidebarContent>
 
-      <SidebarFooter>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="w-full justify-start gap-3 h-14">
-               <Avatar className="h-10 w-10">
-                <AvatarImage src={getAvatar()} alt={getUsername()} />
-                <AvatarFallback>{getUsername().charAt(0)}</AvatarFallback>
-              </Avatar>
-              <div className="text-left">
-                <p className="font-medium">{getUsername()}</p>
-                <p className="text-xs text-muted-foreground capitalize">{role}</p>
-              </div>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-56 mb-2" side="top" align="start">
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <User className="mr-2 h-4 w-4" />
-              <span>Profile</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Settings className="mr-2 h-4 w-4" />
-              <span>Settings</span>
-            </DropdownMenuItem>
-             <DropdownMenuItem>
-              <LifeBuoy className="mr-2 h-4 w-4" />
-              <span>Support</span>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <Link href="/">
-                <LogOut className="mr-2 h-4 w-4" />
-                <span>Log out</span>
-              </Link>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+      <SidebarFooter className="p-4">
+        <Link href="/">
+          <Button variant="ghost" className="w-full justify-start gap-2">
+            <LogOut className="h-5 w-5" />
+            <span>Logout</span>
+          </Button>
+        </Link>
       </SidebarFooter>
     </>
   );
