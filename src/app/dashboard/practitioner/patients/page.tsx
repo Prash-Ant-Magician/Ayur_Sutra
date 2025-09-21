@@ -1,3 +1,4 @@
+
 import {
   Table,
   TableBody,
@@ -6,21 +7,27 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { patients } from "@/lib/data"
 import { MoreHorizontal } from "lucide-react"
 import Link from "next/link"
+import { collection, getDocs, query, where } from "firebase/firestore"
+import { db } from "@/lib/firebase"
+import { Patient } from "@/lib/types"
 
-export default function PatientsListPage() {
+export default async function PatientsListPage() {
+  const patientsQuery = query(collection(db, "users"), where("role", "==", "patient"));
+  const patientsSnapshot = await getDocs(patientsQuery);
+  const patients = patientsSnapshot.docs.map(doc => ({ 
+      id: doc.id,
+      name: doc.data().name,
+      email: doc.data().email,
+      avatar: `https://picsum.photos/seed/${doc.id}/200/200`,
+      dob: doc.data().dob ? format(doc.data().dob.toDate(), "yyyy-MM-dd") : 'N/A', // Assuming dob is a timestamp
+      gender: doc.data().gender || 'N/A',
+   }));
+
   return (
     <div className="container mx-auto py-8">
       <h1 className="text-3xl font-bold font-headline mb-8">Patient Management</h1>
@@ -50,7 +57,7 @@ export default function PatientsListPage() {
                     <div className="flex items-center gap-4">
                       <Avatar>
                         <AvatarImage src={patient.avatar} alt={patient.name} />
-                        <AvatarFallback>{patient.name[0]}</AvatarFallback>
+                        <AvatarFallback>{patient.name ? patient.name[0] : 'U'}</AvatarFallback>
                       </Avatar>
                       <div>
                         <div className="font-medium">{patient.name}</div>

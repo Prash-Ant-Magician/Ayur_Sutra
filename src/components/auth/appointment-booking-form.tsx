@@ -40,7 +40,7 @@ const formSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
   email: z.string().email({ message: "Please enter a valid email." }),
   phone: z.string().min(10, { message: "Please enter a valid phone number." }),
-  gender: z.enum(["male", "female", "other"], { required_error: "Please select a gender."}),
+  gender: z.enum(["Male", "Female", "Other"], { required_error: "Please select a gender."}),
   dob: z.date({
     required_error: "A date of birth is required.",
   }),
@@ -51,6 +51,9 @@ const formSchema = z.object({
     required_error: "An appointment date is required.",
   }),
   appointmentTime: z.string({required_error: "Please select an appointment time."}),
+  medicalHistory: z.string().optional(),
+  symptoms: z.string().optional(),
+  currentTherapies: z.string().optional(),
 });
 
 export function AppointmentBookingForm() {
@@ -78,18 +81,13 @@ export function AppointmentBookingForm() {
         name: values.name,
         email: values.email,
         role: "patient",
-      });
-
-      // Store patient details in Firestore
-      await addDoc(collection(db, "patients"), {
-        uid: user.uid,
-        name: values.name,
-        email: values.email,
         phone: values.phone,
         gender: values.gender,
         dob: values.dob,
         address: values.address,
-        role: "patient",
+        medicalHistory: values.medicalHistory || '',
+        symptoms: values.symptoms || '',
+        currentTherapies: values.currentTherapies || '',
       });
 
       // Store appointment details in Firestore
@@ -194,9 +192,9 @@ export function AppointmentBookingForm() {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="male">Male</SelectItem>
-                  <SelectItem value="female">Female</SelectItem>
-                  <SelectItem value="other">Other</SelectItem>
+                  <SelectItem value="Male">Male</SelectItem>
+                  <SelectItem value="Female">Female</SelectItem>
+                  <SelectItem value="Other">Other</SelectItem>
                 </SelectContent>
               </Select>
               <FormMessage />
@@ -248,10 +246,49 @@ export function AppointmentBookingForm() {
           control={form.control}
           name="address"
           render={({ field }) => (
-            <FormItem className="md:col-span-2">
+            <FormItem>
               <FormLabel>Address</FormLabel>
               <FormControl>
                 <Textarea placeholder="123 Wellness Lane, Harmony City" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+         <FormField
+          control={form.control}
+          name="medicalHistory"
+          render={({ field }) => (
+            <FormItem className="md:col-span-2">
+              <FormLabel>Medical History (Optional)</FormLabel>
+              <FormControl>
+                <Textarea placeholder="e.g., Hypertension, Type 2 Diabetes" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+         <FormField
+          control={form.control}
+          name="symptoms"
+          render={({ field }) => (
+            <FormItem className="md:col-span-2">
+              <FormLabel>Current Symptoms (Optional)</FormLabel>
+              <FormControl>
+                <Textarea placeholder="e.g., Chronic back pain, insomnia" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+         <FormField
+          control={form.control}
+          name="currentTherapies"
+          render={({ field }) => (
+            <FormItem className="md:col-span-2">
+              <FormLabel>Current Medications/Therapies (Optional)</FormLabel>
+              <FormControl>
+                <Textarea placeholder="e.g., Metformin, Lisinopril" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -267,7 +304,7 @@ export function AppointmentBookingForm() {
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select location" />
-                  </SelectTrigger>
+                  </Trigger>
                 </FormControl>
                 <SelectContent>
                   <SelectItem value="harmony-city">Harmony City</SelectItem>
@@ -288,7 +325,7 @@ export function AppointmentBookingForm() {
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select therapy" />
-                  </SelectTrigger>
+                  </Trigger>
                 </FormControl>
                 <SelectContent>
                     <SelectItem value="Abhyanga">Abhyanga</SelectItem>
@@ -351,7 +388,7 @@ export function AppointmentBookingForm() {
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select a time slot" />
-                  </SelectTrigger>
+                  </Trigger>
                 </FormControl>
                 <SelectContent>
                   {timeSlots.map(time => (

@@ -1,18 +1,39 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { patients } from "@/lib/data";
 import { notFound } from "next/navigation";
 import { PrecautionGenerator } from "@/components/dashboard/practitioner/precaution-generator";
 import { TherapySuggester } from "@/components/dashboard/practitioner/therapy-suggester";
 import { Cake, HeartPulse, Stethoscope, User } from "lucide-react";
 import { PatientProgressChart } from "@/components/dashboard/practitioner/patient-progress-chart";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase";
+import { Patient } from "@/lib/types";
+import { format } from "date-fns";
 
-export default function PatientDetailPage({ params }: { params: { id: string } }) {
-  const patient = patients.find(p => p.id === params.id);
 
-  if (!patient) {
-    notFound();
-  }
+export default async function PatientDetailPage({ params }: { params: { id: string } }) {
+    const patientDocRef = doc(db, "users", params.id);
+    const patientDoc = await getDoc(patientDocRef);
+
+    if (!patientDoc.exists() || patientDoc.data().role !== 'patient') {
+        notFound();
+    }
+    
+    const patientData = patientDoc.data();
+    const patient: Patient = {
+        id: patientDoc.id,
+        name: patientData.name,
+        email: patientData.email,
+        role: 'patient',
+        avatar: `https://picsum.photos/seed/${patientDoc.id}/200/200`,
+        lastLogin: new Date().toISOString(), // Not available in 'users' doc
+        medicalHistory: patientData.medicalHistory || 'No history provided.',
+        symptoms: patientData.symptoms || 'No symptoms provided.',
+        currentTherapies: patientData.currentTherapies || 'No therapies listed.',
+        dob: patientData.dob ? format(patientData.dob.toDate(), "PPP") : 'Not provided',
+        gender: patientData.gender || 'Not specified'
+    };
+
 
   const patientProfile = `Medical History: ${patient.medicalHistory}. Symptoms: ${patient.symptoms}. Current Therapies: ${patient.currentTherapies}.`;
 
