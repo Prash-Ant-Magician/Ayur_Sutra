@@ -42,15 +42,15 @@ const patientLinks = [
 const practitionerLinks = [
   { href: '/dashboard/practitioner', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/dashboard/practitioner/patients', label: 'Patients', icon: Users },
-  { href: '#', label: 'Therapies', icon: HeartPulse },
+  { href: '/dashboard/practitioner/therapies', label: 'Therapies', icon: HeartPulse },
 ];
 
 const adminLinks = [
   { href: '/dashboard/admin', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '#', label: 'Patients', icon: Users },
-  { href: '#', label: 'Therapists/Staff', icon: Users },
-  { href: '#', label: 'Reports & Analytics', icon: BarChart },
-  { href: '#', label: 'Settings', icon: Settings },
+  { href: '/dashboard/admin/patients', label: 'Patients', icon: Users },
+  { href: '/dashboard/admin/staff', label: 'Therapists/Staff', icon: Users },
+  { href: '/dashboard/admin/reports', label: 'Reports & Analytics', icon: BarChart },
+  { href: '/dashboard/admin/settings', label: 'Settings', icon: Settings },
 ];
 
 export function DashboardNav() {
