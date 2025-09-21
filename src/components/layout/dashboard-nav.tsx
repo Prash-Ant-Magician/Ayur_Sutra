@@ -22,7 +22,8 @@ import {
   Bell,
   BookMarked,
   UserPlus,
-  FileText
+  FileText,
+  Library
 } from 'lucide-react';
 import { Logo } from './logo';
 import { Button } from '../ui/button';
@@ -52,6 +53,7 @@ const adminLinks = [
   { href: '/dashboard/admin/patients', label: 'Patients', icon: Users },
   { href: '/dashboard/admin/staff', label: 'Therapists/Staff', icon: Users },
   { href: '/dashboard/admin/content', label: 'Content', icon: FileText },
+  { href: '/dashboard/admin/resources', label: 'Resources', icon: Library },
   { href: '/dashboard/admin/reports', label: 'Reports & Analytics', icon: BarChart },
   { href: '/dashboard/admin/settings', label: 'Settings', icon: Settings },
 ];
@@ -98,7 +100,7 @@ export function DashboardNav() {
             <SidebarMenuItem key={link.href}>
               <Link href={link.href} passHref>
                 <SidebarMenuButton
-                  isActive={pathname === link.href}
+                  isActive={pathname.startsWith(link.href) && (link.href !== '/dashboard/admin' || pathname === '/dashboard/admin')}
                   className="font-headline text-base"
                 >
                   <link.icon className="h-5 w-5" />

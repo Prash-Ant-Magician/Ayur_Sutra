@@ -1,4 +1,5 @@
 
+
 export type UserRole = 'patient' | 'practitioner' | 'admin';
 
 export type User = {
@@ -61,4 +62,15 @@ export type TherapyProgress = {
   mobilityScore: number;
   wellbeing: number;
   notes?: string;
+};
+
+export type ResourceArticle = {
+  id: string;
+  title: string;
+  summary: string;
+  content: string;
+  category: string;
+  imageUrl: string;
+  imageHint: string;
+  createdAt: any; // Firestore timestamp
 };

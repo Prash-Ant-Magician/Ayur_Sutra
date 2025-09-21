@@ -58,6 +58,7 @@ export default function ServicesPage() {
                   </Link>
                   <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
                     <Link href="/services" className="text-primary font-semibold">Services</Link>
+                    <Link href="/resources" className="text-muted-foreground hover:text-primary">Resources</Link>
                     <Link href="/about" className="text-muted-foreground hover:text-primary">About Us</Link>
                     <Link href="/testimonials" className="text-muted-foreground hover:text-primary">Testimonials</Link>
                     <Link href="/contact" className="text-muted-foreground hover:text-primary">Contact</Link>
