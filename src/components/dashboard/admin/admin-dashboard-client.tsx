@@ -32,6 +32,13 @@ const therapyTypeData = [
   { name: 'Others', value: 200, color: 'hsl(var(--chart-3))' },
 ];
 
+const chartConfig = {
+    Abhyanga: { label: "Abhyanga", color: "hsl(var(--chart-1))" },
+    Shirodhara: { label: "Shirodhara", color: "hsl(var(--chart-2))" },
+    Others: { label: "Others", color: "hsl(var(--chart-3))" },
+};
+
+
 export function AdminDashboardClient({ 
   stats, 
   upcomingAppointments,
@@ -169,16 +176,16 @@ export function AdminDashboardClient({
             <h2 className="text-xl font-semibold mb-4">Therapy Type Distribution</h2>
             <Card>
                 <CardContent className="flex items-center">
-                    <div className="w-1/2 h-64">
-                         <ResponsiveContainer width="100%" height="100%">
-                            <PieChart>
-                                <Pie data={therapyTypeData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} fill="#8884d8" labelLine={false}>
-                                    {therapyTypeData.map((entry, index) => <Cell key={`cell-${index}`} fill={entry.color} />)}
-                                </Pie>
-                                <ChartTooltip content={<ChartTooltipContent />} />
-                            </PieChart>
+                    <ChartContainer config={chartConfig} className="w-1/2 h-64">
+                        <ResponsiveContainer width="100%" height="100%">
+                        <PieChart>
+                            <Pie data={therapyTypeData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} fill="#8884d8" labelLine={false}>
+                                {therapyTypeData.map((entry, index) => <Cell key={`cell-${index}`} fill={entry.color} />)}
+                            </Pie>
+                            <ChartTooltip content={<ChartTooltipContent nameKey="name" />} />
+                        </PieChart>
                         </ResponsiveContainer>
-                    </div>
+                    </ChartContainer>
                     <div className="w-1/2 space-y-2">
                         {therapyTypeData.map(entry => (
                             <div key={entry.name} className="flex items-center">
