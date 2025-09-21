@@ -7,6 +7,7 @@ import Link from "next/link";
 import { Logo } from "@/components/layout/logo";
 import Image from "next/image";
 import { useAuth } from "@/context/auth-context";
+import { FloatingChatbot } from "@/components/homepage/floating-chatbot";
 
 function LeafIcon(props: React.SVGProps<SVGSVGElement>) {
     return (
@@ -206,6 +207,7 @@ export default function Home() {
             <p className="text-sm text-primary-foreground/80">&copy; {new Date().getFullYear()} Ayur Sutra. All rights reserved.</p>
         </div>
       </footer>
+      <FloatingChatbot />
     </div>
   );
 }
