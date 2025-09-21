@@ -4,10 +4,12 @@ import { appointments, practitioners } from "@/lib/data";
 export default function SchedulePage() {
   return (
     <div className="container mx-auto py-8">
-      <h1 className="text-3xl font-bold font-headline mb-8">Schedule a Session</h1>
-      <p className="text-muted-foreground mb-8">
-        Select a date and time that works for you.
-      </p>
+      <div className="text-center mb-12">
+        <h1 className="text-4xl font-bold font-headline text-primary">Book Your Therapy Session</h1>
+        <p className="mt-2 text-lg text-muted-foreground">
+          Follow the steps below to schedule your appointment with one of our expert practitioners.
+        </p>
+      </div>
       <AppointmentScheduler appointments={appointments} practitioners={practitioners} />
     </div>
   );
