@@ -43,8 +43,8 @@ const practitionerLinks = [
 
 const adminLinks = [
   { href: '/dashboard/admin', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/dashboard/practitioner/patients', label: 'Patients', icon: Users },
-  { href: '/dashboard/practitioner', label: 'Therapists/Staff', icon: Users },
+  { href: '#', label: 'Patients', icon: Users },
+  { href: '#', label: 'Therapists/Staff', icon: Users },
   { href: '#', label: 'Reports & Analytics', icon: BarChart },
   { href: '#', label: 'Settings', icon: Settings },
 ];
@@ -56,7 +56,7 @@ export function DashboardNav() {
     if (pathname.startsWith('/dashboard/patient')) return 'patient';
     if (pathname.startsWith('/dashboard/practitioner')) return 'practitioner';
     if (pathname.startsWith('/dashboard/admin')) return 'admin';
-    return 'admin'; // Default to admin for the purpose of this view
+    return 'practitioner'; // Default to practitioner for this view
   };
 
   const role = getRole();
@@ -81,6 +81,13 @@ export function DashboardNav() {
     if (role === 'admin') return 'https://picsum.photos/seed/avatar6/200/200';
     return 'https://picsum.photos/seed/avatar/200/200';
   }
+  
+  const getRoleTitle = () => {
+      if (role === 'patient') return 'Patient';
+      if (role === 'practitioner') return 'Practitioner';
+      if (role === 'admin') return 'Admin';
+      return 'User';
+  }
 
   return (
     <>
@@ -89,7 +96,7 @@ export function DashboardNav() {
           <Logo className="w-10 h-10 text-sidebar-foreground" />
           <div>
             <p className="text-xl font-semibold font-headline text-sidebar-foreground">Ayur Sutra</p>
-            <p className="text-sm text-sidebar-foreground/80">Admin</p>
+            <p className="text-sm text-sidebar-foreground/80">{getRoleTitle()}</p>
           </div>
         </div>
       </SidebarHeader>
