@@ -9,7 +9,6 @@ import {
   SidebarMenuButton,
   SidebarContent,
   SidebarFooter,
-  SidebarGroup,
 } from '@/components/ui/sidebar';
 import {
   LayoutDashboard,
@@ -19,10 +18,9 @@ import {
   BarChart,
   Settings,
   LogOut,
-  User,
-  LifeBuoy,
   Bot,
-  Bell
+  Bell,
+  BookMarked
 } from 'lucide-react';
 import { Logo } from './logo';
 import { Button } from '../ui/button';
@@ -47,6 +45,7 @@ const practitionerLinks = [
 
 const adminLinks = [
   { href: '/dashboard/admin', label: 'Dashboard', icon: LayoutDashboard },
+  { href: '/dashboard/admin/book-appointment', label: 'Book Appointment', icon: BookMarked },
   { href: '/dashboard/admin/patients', label: 'Patients', icon: Users },
   { href: '/dashboard/admin/staff', label: 'Therapists/Staff', icon: Users },
   { href: '/dashboard/admin/reports', label: 'Reports & Analytics', icon: BarChart },
