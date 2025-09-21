@@ -14,6 +14,7 @@ import Link from "next/link"
 import { collection, getDocs, query, where } from "firebase/firestore"
 import { db } from "@/lib/firebase"
 import { format } from "date-fns"
+import { PlusCircle } from "lucide-react"
 
 export default async function AdminPatientsPage() {
   const patientsQuery = query(collection(db, "users"), where("role", "==", "patient"));
@@ -32,7 +33,14 @@ export default async function AdminPatientsPage() {
 
   return (
     <div className="container mx-auto py-8">
-      <h1 className="text-3xl font-bold font-headline mb-8">Patient Management</h1>
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold font-headline">Patient Management</h1>
+         <Button asChild>
+          <Link href="/dashboard/admin/add-patient">
+            <PlusCircle className="mr-2 h-4 w-4" /> Add New Patient
+          </Link>
+        </Button>
+      </div>
       <Card>
         <CardHeader>
           <CardTitle>All Patients</CardTitle>

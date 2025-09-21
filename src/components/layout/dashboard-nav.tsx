@@ -20,7 +20,8 @@ import {
   LogOut,
   Bot,
   Bell,
-  BookMarked
+  BookMarked,
+  UserPlus
 } from 'lucide-react';
 import { Logo } from './logo';
 import { Button } from '../ui/button';
@@ -46,6 +47,7 @@ const practitionerLinks = [
 const adminLinks = [
   { href: '/dashboard/admin', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/dashboard/admin/book-appointment', label: 'Book Appointment', icon: BookMarked },
+  { href: '/dashboard/admin/add-patient', label: 'Add Patient', icon: UserPlus },
   { href: '/dashboard/admin/patients', label: 'Patients', icon: Users },
   { href: '/dashboard/admin/staff', label: 'Therapists/Staff', icon: Users },
   { href: '/dashboard/admin/reports', label: 'Reports & Analytics', icon: BarChart },
