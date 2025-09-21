@@ -32,7 +32,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
-import { Textarea } from "../ui/textarea";
+import { Textarea } from "@/components/ui/textarea";
 
 const timeSlots = ["09:00 AM", "10:00 AM", "11:00 AM", "02:00 PM", "03:00 PM", "04:00 PM"];
 
@@ -304,7 +304,7 @@ export function AppointmentBookingForm() {
                   <SelectTrigger>
                     <SelectValue placeholder="Select a time slot" />
                   </SelectTrigger>
-                FormControl>
+                </FormControl>
                 <SelectContent>
                   {timeSlots.map(time => (
                       <SelectItem key={time} value={time}>{time}</SelectItem>
