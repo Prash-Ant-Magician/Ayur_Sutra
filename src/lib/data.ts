@@ -127,6 +127,7 @@ export const appointments: Appointment[] = [
 export const notifications: Notification[] = [
   {
     id: 'n1',
+    patientUid: 'p1',
     title: 'Pre-procedure: Abhyanga Session',
     description: 'Please avoid heavy meals at least 2 hours before your session. Stay hydrated.',
     date: '2024-06-12T10:00:00Z',
@@ -134,6 +135,7 @@ export const notifications: Notification[] = [
   },
   {
     id: 'n2',
+    patientUid: 'p1',
     title: 'Post-procedure: Abhyanga Session',
     description: 'Rest for at least 30 minutes after your therapy. A warm shower is recommended.',
     date: '2024-05-18T11:00:00Z',
@@ -141,6 +143,7 @@ export const notifications: Notification[] = [
   },
   {
     id: 'n3',
+    patientUid: 'p2',
     title: 'Appointment Reminder',
     description: 'Your Shirodhara session with Dr. Samuel Green is scheduled for tomorrow at 2:00 PM.',
     date: '2024-06-15T14:00:00Z',

@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useRouter } from "next/navigation";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, db } from "@/lib/firebase";
 import { addDoc, collection } from "firebase/firestore";
 
@@ -68,6 +68,9 @@ export function AppointmentBookingForm() {
       const userCredential = await createUserWithEmailAndPassword(auth, values.email, password);
       const user = userCredential.user;
 
+      // Add display name to user profile
+      await updateProfile(user, { displayName: values.name });
+
       // Store patient details in Firestore
       await addDoc(collection(db, "patients"), {
         uid: user.uid,
@@ -84,15 +87,24 @@ export function AppointmentBookingForm() {
       const appointment = {
         patientUid: user.uid,
         hospitalLocation: values.hospitalLocation,
-        therapy: values.therapy,
+        therapyType: values.therapy,
         date: format(values.appointmentDate, "yyyy-MM-dd"),
         time: values.appointmentTime,
         status: 'Scheduled',
+        practitionerId: 'pr1' // Assigning a default practitioner for now
       };
       await addDoc(collection(db, "appointments"), appointment);
 
+      // Create a notification for the booking
+      await addDoc(collection(db, "notifications"), {
+        patientUid: user.uid,
+        title: "Appointment Confirmed",
+        description: `Your appointment for ${values.therapy} on ${format(values.appointmentDate, "PPP")} at ${values.appointmentTime} is confirmed.`,
+        date: new Date().toISOString(),
+        read: false,
+      });
+
       // --- Simulated Notifications ---
-      // In a real app, you would use a backend service to send these.
       console.log(`--- Sending Booking Confirmation ---`);
       console.log(`Email to: ${values.email}`);
       console.log(`Subject: Your Appointment is Confirmed!`);
@@ -104,7 +116,7 @@ export function AppointmentBookingForm() {
       
       toast({
         title: "Booking Successful & Account Created!",
-        description: `Your account has been created. Your email is ${values.email} and your temporary password is ${password}. Please login to see your dashboard. Confirmation has been sent to your email and phone.`,
+        description: `Your account has been created. Your email is ${values.email} and your temporary password is ${password}. Please login to see your dashboard.`,
         duration: 10000,
       });
 
@@ -270,9 +282,9 @@ export function AppointmentBookingForm() {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                    <SelectItem value="abhyanga">Abhyanga</SelectItem>
-                    <SelectItem value="shirodhara">Shirodhara</SelectItem>
-                    <SelectItem value="panchakarma">Panchakarma</SelectItem>
+                    <SelectItem value="Abhyanga">Abhyanga</SelectItem>
+                    <SelectItem value="Shirodhara">Shirodhara</SelectItem>
+                    <SelectItem value="Panchakarma">Panchakarma</SelectItem>
                 </SelectContent>
               </Select>
               <FormMessage />
@@ -349,5 +361,3 @@ export function AppointmentBookingForm() {
     </Form>
   );
 }
-
-    

@@ -39,6 +39,7 @@ export type Appointment = {
 
 export type Notification = {
   id: string;
+  patientUid: string;
   title: string;
   description: string;
   date: string;
