@@ -4,9 +4,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useRouter } from "next/navigation";
-import { signInWithEmailAndPassword, signInWithPopup, RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
+import { sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import { auth, googleProvider } from "@/lib/firebase";
-import { patients, practitioners, admins } from "@/lib/data";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -19,10 +18,20 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import type { User } from "@/lib/types";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 const emailSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email." }),
@@ -39,6 +48,9 @@ export function LoginForm() {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [confirmationResult, setConfirmationResult] = useState<any>(null);
+  const [showPasswordResetDialog, setShowPasswordResetDialog] = useState(false);
+  const [resetEmail, setResetEmail] = useState("");
+
 
   const emailForm = useForm<z.infer<typeof emailSchema>>({
     resolver: zodResolver(emailSchema),
@@ -50,19 +62,24 @@ export function LoginForm() {
     defaultValues: { phone: ""},
   });
 
-  const handleSuccessfulLogin = (email: string | null) => {
-    // This is a simplified way to determine role for the demo.
-    const allUsers = [...patients, ...practitioners, ...admins];
-    const user = allUsers.find(u => u.email === email);
+  const handleSuccessfulLogin = (user: any) => {
+      // In a real app, you would fetch the user's role from your database.
+      // For this demo, we'll assign a role based on email.
+      let role = 'patient'; // default role
+      if (user.email?.endsWith('@ayursutra.com')) {
+          role = 'practitioner';
+      }
+      if (user.email === 'admin@ayursutra.com') {
+          role = 'admin';
+      }
 
-    if (user) {
       toast({
         title: "Login Successful",
-        description: `Redirecting to ${user.role} dashboard...`,
+        description: `Redirecting to ${role} dashboard...`,
       });
 
       setTimeout(() => {
-        switch (user.role) {
+        switch (role) {
           case "patient":
             router.push("/dashboard/patient");
             break;
@@ -76,26 +93,17 @@ export function LoginForm() {
             router.push("/dashboard");
         }
       }, 1000);
-    } else {
-      toast({
-        title: "Login Successful",
-        description: `Redirecting to dashboard...`,
-      });
-      setTimeout(() => {
-        router.push("/dashboard/patient");
-      }, 1000);
-    }
   }
 
   async function onEmailSubmit(values: z.infer<typeof emailSchema>) {
     setLoading(true);
     try {
       const userCredential = await signInWithEmailAndPassword(auth, values.email, values.password);
-      handleSuccessfulLogin(userCredential.user.email);
+      handleSuccessfulLogin(userCredential.user);
     } catch (error: any) {
         toast({
             title: "Login Failed",
-            description: error.message,
+            description: "Invalid credentials. Please try again.",
             variant: "destructive"
         })
     } finally {
@@ -127,7 +135,7 @@ export function LoginForm() {
     } else {
         try {
             const credential = await confirmationResult.confirm(values.code);
-            handleSuccessfulLogin(credential.user.email);
+            handleSuccessfulLogin(credential.user);
         } catch(error: any) {
             toast({
                 title: "Invalid Code",
@@ -143,7 +151,7 @@ export function LoginForm() {
     setLoading(true);
     try {
       const userCredential = await signInWithPopup(auth, googleProvider);
-      handleSuccessfulLogin(userCredential.user.email);
+      handleSuccessfulLogin(userCredential.user);
     } catch (error: any) {
        toast({
             title: "Google Sign-In Failed",
@@ -154,6 +162,35 @@ export function LoginForm() {
         setLoading(false);
     }
   }
+
+  const handlePasswordReset = async () => {
+    if (!resetEmail) {
+      toast({
+        title: "Email required",
+        description: "Please enter your email address to reset your password.",
+        variant: "destructive",
+      });
+      return;
+    }
+    setLoading(true);
+    try {
+      await sendPasswordResetEmail(auth, resetEmail);
+      toast({
+        title: "Password Reset Email Sent",
+        description: "Check your inbox for instructions to reset your password.",
+      });
+      setShowPasswordResetDialog(false);
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: "Could not send password reset email. Please ensure the email address is correct.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
   return (
     <>
@@ -192,6 +229,34 @@ export function LoginForm() {
                     </FormItem>
                     )}
                 />
+                <div className="text-sm text-right">
+                    <AlertDialog open={showPasswordResetDialog} onOpenChange={setShowPasswordResetDialog}>
+                      <AlertDialogTrigger asChild>
+                        <Button variant="link" className="p-0 h-auto">Forgot Password?</Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Reset Your Password</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            Enter your email address below and we&apos;ll send you a link to reset your password.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                         <Input 
+                            type="email" 
+                            placeholder="you@example.com" 
+                            value={resetEmail}
+                            onChange={(e) => setResetEmail(e.target.value)} 
+                          />
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction onClick={handlePasswordReset} disabled={loading}>
+                            {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                            Send Reset Link</AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                </div>
+
                 <Button type="submit" className="w-full" disabled={loading}>
                     {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                     Login with Email
