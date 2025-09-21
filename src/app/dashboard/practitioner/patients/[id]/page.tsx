@@ -5,19 +5,23 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { PrecautionGenerator } from "@/components/dashboard/practitioner/precaution-generator";
 import { TherapySuggester } from "@/components/dashboard/practitioner/therapy-suggester";
-import { Cake, HeartPulse, Stethoscope, User, BookHeart } from "lucide-react";
+import { Cake, HeartPulse, Stethoscope, User, BookHeart, MessageSquare } from "lucide-react";
 import { PatientProgressChart } from "@/components/dashboard/practitioner/patient-progress-chart";
 import { collection, doc, getDoc, getDocs, orderBy, query } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import { Patient, TherapyProgress } from "@/lib/types";
+import { Patient, Practitioner, TherapyProgress } from "@/lib/types";
 import { format } from "date-fns";
 import { useEffect, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { LogProgressForm } from "@/components/dashboard/practitioner/log-progress-form";
+import { useAuth } from "@/context/auth-context";
+import { Chat } from "@/components/messaging/chat";
 
 
 export default function PatientDetailPage({ params }: { params: { id: string } }) {
+    const { user: practitionerUser } = useAuth();
     const [patient, setPatient] = useState<Patient | null>(null);
+    const [practitioner, setPractitioner] = useState<Practitioner | null>(null);
     const [progressData, setProgressData] = useState<TherapyProgress[]>([]);
     const [loading, setLoading] = useState(true);
     
@@ -42,6 +46,16 @@ export default function PatientDetailPage({ params }: { params: { id: string } }
             });
         }
     };
+    
+    const fetchPractitionerData = async () => {
+        if(practitionerUser) {
+            const practitionerDocRef = doc(db, "practitioners", practitionerUser.uid);
+            const practitionerDoc = await getDoc(practitionerDocRef);
+            if (practitionerDoc.exists()) {
+                setPractitioner({ id: practitionerDoc.id, ...practitionerDoc.data() } as Practitioner);
+            }
+        }
+    };
 
     const fetchProgressData = async () => {
         const progressQuery = query(collection(db, `users/${params.id}/progress_notes`), orderBy("date", "asc"));
@@ -56,11 +70,11 @@ export default function PatientDetailPage({ params }: { params: { id: string } }
     useEffect(() => {
         const loadData = async () => {
             setLoading(true);
-            await Promise.all([fetchPatientData(), fetchProgressData()]);
+            await Promise.all([fetchPatientData(), fetchProgressData(), fetchPractitionerData()]);
             setLoading(false);
         }
         loadData();
-    }, [params.id]);
+    }, [params.id, practitionerUser]);
     
     const handleProgressLogged = () => {
         fetchProgressData(); // Refetch progress data when a new log is submitted
@@ -150,6 +164,25 @@ export default function PatientDetailPage({ params }: { params: { id: string } }
           </div>
           <div className="lg:col-span-2 grid grid-cols-1 gap-8 content-start">
             <PatientProgressChart data={progressData} />
+
+            {practitioner && patient && (
+                <Card>
+                    <CardHeader>
+                        <CardTitle className="font-headline flex items-center gap-2">
+                            <MessageSquare className="h-5 w-5 text-primary"/>
+                            Secure Messaging
+                        </CardTitle>
+                        <CardDescription>Chat directly with {patient.name}.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <Chat
+                            sender={{ id: practitioner.id, name: practitioner.name, avatar: practitioner.avatar }}
+                            receiver={{ id: patient.id, name: patient.name, avatar: patient.avatar }}
+                        />
+                    </CardContent>
+                </Card>
+            )}
+
             <TherapySuggester profile={patientProfile} />
             <PrecautionGenerator patient={patient} />
           </div>

@@ -23,7 +23,8 @@ import {
   BookMarked,
   UserPlus,
   FileText,
-  Library
+  Library,
+  MessageSquare,
 } from 'lucide-react';
 import { Logo } from './logo';
 import { Button } from '../ui/button';
@@ -35,6 +36,7 @@ import { useRouter } from 'next/navigation';
 const patientLinks = [
   { href: '/dashboard/patient', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/dashboard/patient/schedule', label: 'Schedule', icon: Calendar },
+  { href: '/dashboard/patient/messaging', label: 'Messaging', icon: MessageSquare },
   { href: '/dashboard/patient/notifications', label: 'Notifications', icon: Bell },
   { href: '/dashboard/patient/settings', label: 'Settings', icon: Settings },
 ];
