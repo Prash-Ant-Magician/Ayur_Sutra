@@ -34,7 +34,6 @@ const patientLinks = [
   { href: '/dashboard/patient', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/dashboard/patient/schedule', label: 'Schedule', icon: Calendar },
   { href: '/dashboard/patient/notifications', label: 'Notifications', icon: Bell },
-  { href: '/dashboard/patient/chatbot', label: 'AI Assistant', icon: Bot },
   { href: '/dashboard/patient/settings', label: 'Settings', icon: Settings },
 ];
 
