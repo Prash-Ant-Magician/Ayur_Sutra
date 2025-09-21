@@ -47,7 +47,7 @@ export function AdminDashboardClient({
   practitioners
 }: AdminDashboardClientProps) {
 
-  const getPatientName = (patientId: string) => patients.find(p => p.id === patientId)?.name || "Unknown";
+  const getPatientName = (patientUid: string) => patients.find(p => p.id === patientUid)?.name || "Unknown";
   const getPractitionerName = (practitionerId: string) => practitioners.find(p => p.id === practitionerId)?.name || "Unknown";
 
   return (
@@ -138,7 +138,7 @@ export function AdminDashboardClient({
                     <TableBody>
                       {upcomingAppointments.map(apt => (
                         <TableRow key={apt.id}>
-                          <TableCell>{getPatientName(apt.patientId)}</TableCell>
+                          <TableCell>{getPatientName(apt.patientUid)}</TableCell>
                           <TableCell>{getPractitionerName(apt.practitionerId)}</TableCell>
                           <TableCell>{format(new Date(apt.date), "MMM dd")} {apt.time}</TableCell>
                           <TableCell>

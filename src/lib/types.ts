@@ -36,7 +36,7 @@ export type AppUser = {
 
 export type Appointment = {
   id: string;
-  patientId: string;
+  patientUid: string;
   practitionerId: string;
   date: string;
   time: string;

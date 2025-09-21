@@ -16,16 +16,7 @@ export default async function AdminPage() {
   const patientsSnapshot = await getDocs(patientsQuery);
   const patients = patientsSnapshot.docs.map(doc => ({
       id: doc.id,
-      name: doc.data().name,
-      email: doc.data().email,
-      role: 'patient',
-      avatar: `https://picsum.photos/seed/${doc.id}/200/200`,
-      lastLogin: new Date().toISOString(), // This should be updated on actual login
-      medicalHistory: '', // These fields are not in the 'users' collection
-      symptoms: '',
-      currentTherapies: '',
-      dob: '',
-      gender: 'Other'
+      ...doc.data()
   } as Patient));
   
   // Fetch appointments
@@ -34,32 +25,25 @@ export default async function AdminPage() {
     collection(db, "appointments"),
     where("date", ">=", format(now, "yyyy-MM-dd")),
     orderBy("date"),
-    limit(3)
+    limit(5)
   );
   const appointmentsSnapshot = await getDocs(appointmentsQuery);
   const upcomingAppointments = appointmentsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Appointment));
 
-  // Fetch new registrations (recently created patients) - Approximating with a simple query
-  const newRegistrationsQuery = query(collection(db, "users"), where("role", "==", "patient"), orderBy("name"), limit(2)); // Firestore doesn't have a reliable "createdAt" without setting it
+  // Fetch new registrations (recently created patients)
+  const newRegistrationsQuery = query(collection(db, "users"), where("role", "==", "patient"), orderBy("name"), limit(5));
   const newRegistrationsSnapshot = await getDocs(newRegistrationsQuery);
   const newRegistrations = newRegistrationsSnapshot.docs.map(doc => ({
        id: doc.id,
-      name: doc.data().name,
-      email: doc.data().email,
-      role: 'patient',
+      ...doc.data(),
       avatar: `https://picsum.photos/seed/${doc.id}/200/200`,
-      lastLogin: new Date().toISOString(),
-      medicalHistory: '',
-      symptoms: '',
-      currentTherapies: '',
-      dob: '',
-      gender: 'Other'
+      lastLogin: new Date().toISOString(), // This should be a field in the user doc
   } as Patient));
 
   const stats = {
     totalPatients: patients.length,
     totalTherapists: practitioners.length,
-    upcomingAppointments: upcomingAppointments.length,
+    upcomingAppointments: upcomingAppointments.length, // This is just the count of limited query, for full count remove limit
     newBookingsThisWeek: 5, // This would require a more complex query to calculate
   };
 

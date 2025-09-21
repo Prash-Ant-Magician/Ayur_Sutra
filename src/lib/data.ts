@@ -77,7 +77,7 @@ export const admins: Admin[] = [
 export const appointments: Appointment[] = [
   {
     id: 'apt1',
-    patientId: 'p1',
+    patientUid: 'p1',
     practitionerId: 'pr1',
     date: '2024-06-15',
     time: '10:00 AM',
@@ -86,7 +86,7 @@ export const appointments: Appointment[] = [
   },
   {
     id: 'apt2',
-    patientId: 'p2',
+    patientUid: 'p2',
     practitionerId: 'pr2',
     date: '2024-06-16',
     time: '02:00 PM',
@@ -95,7 +95,7 @@ export const appointments: Appointment[] = [
   },
   {
     id: 'apt3',
-    patientId: 'p1',
+    patientUid: 'p1',
     practitionerId: 'pr1',
     date: '2024-05-18',
     time: '10:00 AM',
@@ -105,7 +105,7 @@ export const appointments: Appointment[] = [
   // Adding today's appointments for practitioner dashboard
   {
     id: 'apt4',
-    patientId: 'p2',
+    patientUid: 'p2',
     practitionerId: 'pr1',
     date: new Date().toISOString().split('T')[0],
     time: '11:00 AM',
@@ -114,7 +114,7 @@ export const appointments: Appointment[] = [
   },
   {
     id: 'apt5',
-    patientId: 'p3',
+    patientUid: 'p3',
     practitionerId: 'pr1',
     date: new Date().toISOString().split('T')[0],
     time: '03:00 PM',

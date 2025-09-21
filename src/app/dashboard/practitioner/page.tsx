@@ -7,7 +7,7 @@ import { Clock, ArrowRight, Users } from "lucide-react";
 import Link from "next/link";
 import { format } from 'date-fns';
 import { useAuth } from "@/context/auth-context";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs, query, where, documentId } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { Appointment, Patient } from "@/lib/types";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -38,7 +38,7 @@ export default function PractitionerPage() {
         if (appointments.length > 0) {
             const patientIds = [...new Set(appointments.map(a => a.patientUid))];
             if (patientIds.length > 0) {
-                 const patientsQuery = query(collection(db, "users"), where("uid", "in", patientIds));
+                 const patientsQuery = query(collection(db, "users"), where(documentId(), "in", patientIds));
                  const patientsSnapshot = await getDocs(patientsQuery);
                  const patientData = patientsSnapshot.docs.map(doc => ({
                      id: doc.id,
