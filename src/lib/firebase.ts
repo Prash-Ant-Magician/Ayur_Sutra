@@ -19,6 +19,9 @@ export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const googleProvider = new GoogleAuthProvider();
 
+// Firebase In-App Messaging is automatically initialized by the core SDK.
+// You can create and manage campaigns from the Firebase console.
+
 declare global {
     interface Window {
         recaptchaVerifier: any;
