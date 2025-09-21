@@ -6,7 +6,7 @@ import * as z from "zod";
 import { useRouter } from "next/navigation";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, db } from "@/lib/firebase";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, doc, setDoc } from "firebase/firestore";
 
 
 import { Button } from "@/components/ui/button";
@@ -70,6 +70,15 @@ export function AppointmentBookingForm() {
 
       // Add display name to user profile
       await updateProfile(user, { displayName: values.name });
+
+      // Store user role and other details in Firestore
+      const userDocRef = doc(db, "users", user.uid);
+      await setDoc(userDocRef, {
+        uid: user.uid,
+        name: values.name,
+        email: values.email,
+        role: "patient",
+      });
 
       // Store patient details in Firestore
       await addDoc(collection(db, "patients"), {

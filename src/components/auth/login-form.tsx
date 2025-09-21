@@ -4,8 +4,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useRouter } from "next/navigation";
-import { sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
-import { auth, googleProvider } from "@/lib/firebase";
+import { sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, RecaptchaVerifier, signInWithPhoneNumber, User } from "firebase/auth";
+import { auth, googleProvider, db } from "@/lib/firebase";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -32,6 +33,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { useAuth } from "@/context/auth-context";
 
 const emailSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email." }),
@@ -50,6 +52,7 @@ export function LoginForm() {
   const [confirmationResult, setConfirmationResult] = useState<any>(null);
   const [showPasswordResetDialog, setShowPasswordResetDialog] = useState(false);
   const [resetEmail, setResetEmail] = useState("");
+  const { handleLogin } = useAuth();
 
 
   const emailForm = useForm<z.infer<typeof emailSchema>>({
@@ -62,44 +65,11 @@ export function LoginForm() {
     defaultValues: { phone: ""},
   });
 
-  const handleSuccessfulLogin = (user: any) => {
-      // In a real app, you would fetch the user's role from your database.
-      // For this demo, we'll assign a role based on email.
-      let role = 'patient'; // default role
-      if (user.email?.endsWith('@ayursutra.com')) {
-          role = 'practitioner';
-      }
-      if (user.email === 'admin@ayursutra.com') {
-          role = 'admin';
-      }
-
-      toast({
-        title: "Login Successful",
-        description: `Redirecting to ${role} dashboard...`,
-      });
-
-      setTimeout(() => {
-        switch (role) {
-          case "patient":
-            router.push("/dashboard/patient");
-            break;
-          case "practitioner":
-            router.push("/dashboard/practitioner");
-            break;
-          case "admin":
-            router.push("/dashboard/admin");
-            break;
-          default:
-            router.push("/dashboard");
-        }
-      }, 1000);
-  }
-
   async function onEmailSubmit(values: z.infer<typeof emailSchema>) {
     setLoading(true);
     try {
       const userCredential = await signInWithEmailAndPassword(auth, values.email, values.password);
-      handleSuccessfulLogin(userCredential.user);
+      await handleLogin(userCredential.user);
     } catch (error: any) {
         toast({
             title: "Login Failed",
@@ -135,7 +105,7 @@ export function LoginForm() {
     } else {
         try {
             const credential = await confirmationResult.confirm(values.code);
-            handleSuccessfulLogin(credential.user);
+            await handleLogin(credential.user);
         } catch(error: any) {
             toast({
                 title: "Invalid Code",
@@ -151,7 +121,21 @@ export function LoginForm() {
     setLoading(true);
     try {
       const userCredential = await signInWithPopup(auth, googleProvider);
-      handleSuccessfulLogin(userCredential.user);
+      const user = userCredential.user;
+
+      // Check if user exists in Firestore, if not, create a new record
+      const userDocRef = doc(db, "users", user.uid);
+      const userDoc = await getDoc(userDocRef);
+      if (!userDoc.exists()) {
+        await setDoc(userDocRef, {
+            uid: user.uid,
+            name: user.displayName,
+            email: user.email,
+            role: "patient", // Default role for Google sign-in
+        });
+      }
+
+      await handleLogin(user);
     } catch (error: any) {
        toast({
             title: "Google Sign-In Failed",

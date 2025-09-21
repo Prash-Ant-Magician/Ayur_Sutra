@@ -4,8 +4,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useRouter } from "next/navigation";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "@/lib/firebase";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { auth, db } from "@/lib/firebase";
+import { doc, setDoc } from "firebase/firestore";
 
 
 import { Button } from "@/components/ui/button";
@@ -49,15 +50,25 @@ export function SignupForm() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      await createUserWithEmailAndPassword(auth, values.email, values.password);
+      const userCredential = await createUserWithEmailAndPassword(auth, values.email, values.password);
+      const user = userCredential.user;
+
+      // Add display name
+      await updateProfile(user, { displayName: values.name });
+
+      // Store user role and other details in Firestore
+      const userDocRef = doc(db, "users", user.uid);
+      await setDoc(userDocRef, {
+        uid: user.uid,
+        name: values.name,
+        email: values.email,
+        role: values.role,
+      });
+
       toast({
         title: "Signup Successful",
         description: "Redirecting to the login page...",
       });
-
-      // In a real app, you'd handle user creation and role assignment in your backend.
-      // For this demo, we just redirect.
-      console.log("New user signed up:", values);
 
       setTimeout(() => {
         router.push("/login");

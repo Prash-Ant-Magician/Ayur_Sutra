@@ -9,23 +9,23 @@ import { Appointment, Practitioner, TherapyProgress } from "@/lib/types";
 import { therapyProgressData } from "@/lib/data";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { useAuth } from "@/context/auth-context";
 
 export default function PatientPage() {
-  const [user, setUser] = useState<User | null>(null);
+  const { user } = useAuth();
   const [upcomingAppointments, setUpcomingAppointments] = useState<Appointment[]>([]);
   const [pastAppointments, setPastAppointments] = useState<Appointment[]>([]);
   const [practitioners, setPractitioners] = useState<Practitioner[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      if (currentUser) {
-        setUser(currentUser);
-
+    if (user) {
+      const fetchData = async () => {
+        setLoading(true);
         const now = new Date();
 
         // Fetch appointments
-        const appointmentsQuery = query(collection(db, "appointments"), where("patientUid", "==", currentUser.uid));
+        const appointmentsQuery = query(collection(db, "appointments"), where("patientUid", "==", user.uid));
         const appointmentsSnapshot = await getDocs(appointmentsQuery);
         const allAppointments = appointmentsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Appointment));
         
@@ -41,15 +41,13 @@ export default function PatientPage() {
         const allPractitioners = practitionersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Practitioner));
         setPractitioners(allPractitioners);
 
-      } else {
-        // Handle user not logged in
-        setUser(null);
+        setLoading(false);
       }
-      setLoading(false);
-    });
-
-    return () => unsubscribe();
-  }, []);
+      fetchData();
+    } else {
+        setLoading(false);
+    }
+  }, [user]);
 
   if (loading) {
     return (

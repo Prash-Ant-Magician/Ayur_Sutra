@@ -12,6 +12,7 @@ import { useToast } from "@/hooks/use-toast";
 import Link from "next/link";
 import { Logo } from "@/components/layout/logo";
 import { MapPin, Phone, Mail } from "lucide-react";
+import { useAuth } from "@/context/auth-context";
 
 const formSchema = z.object({
   name: z.string().min(2, "Name is required"),
@@ -22,6 +23,7 @@ const formSchema = z.object({
 
 export default function ContactPage() {
     const { toast } = useToast();
+    const { handleGoogleSignIn, loading } = useAuth();
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: { name: "", email: "", subject: "", message: "" },
@@ -51,7 +53,7 @@ export default function ContactPage() {
                     <Link href="/contact" className="text-primary font-semibold">Contact</Link>
                   </nav>
                   <div className="flex items-center gap-2">
-                    <Button variant="outline" size="sm">Login with Google</Button>
+                    <Button variant="outline" size="sm" onClick={handleGoogleSignIn} disabled={loading}>Login with Google</Button>
                     <Button size="sm" asChild><Link href="/login">Login / Sign Up</Link></Button>
                   </div>
                 </div>

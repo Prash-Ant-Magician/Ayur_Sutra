@@ -1,8 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { auth, db } from "@/lib/firebase";
-import { onAuthStateChanged, User } from "firebase/auth";
+import { db } from "@/lib/firebase";
 import { collection, getDocs, query, where, orderBy } from "firebase/firestore";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Notification as NotificationType } from "@/lib/types";
@@ -10,34 +9,34 @@ import { Bell, CheckCircle2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useAuth } from "@/context/auth-context";
 
 export default function NotificationsPage() {
-  const [user, setUser] = useState<User | null>(null);
+  const { user } = useAuth();
   const [notifications, setNotifications] = useState<NotificationType[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      if (currentUser) {
-        setUser(currentUser);
+    if (user) {
+      const fetchNotifications = async () => {
+        setLoading(true);
         // Fetch notifications
         const notificationsQuery = query(
           collection(db, "notifications"), 
-          where("patientUid", "==", currentUser.uid),
+          where("patientUid", "==", user.uid),
           orderBy("date", "desc")
         );
         const notificationsSnapshot = await getDocs(notificationsQuery);
         const allNotifications = notificationsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as NotificationType));
         setNotifications(allNotifications);
-      } else {
-        setUser(null);
-        setNotifications([]);
+        setLoading(false);
       }
-      setLoading(false);
-    });
-
-    return () => unsubscribe();
-  }, []);
+      fetchNotifications();
+    } else {
+        setNotifications([]);
+        setLoading(false);
+    }
+  }, [user]);
 
   if (loading) {
     return (

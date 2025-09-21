@@ -1,8 +1,11 @@
+"use client";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Image from "next/image";
 import Link from "next/link";
 import { Logo } from "@/components/layout/logo";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/context/auth-context";
 
 const services = [
   {
@@ -44,6 +47,7 @@ const services = [
 ];
 
 export default function ServicesPage() {
+    const { handleGoogleSignIn, loading } = useAuth();
     return (
         <div className="flex flex-col min-h-screen bg-background">
              <header className="sticky top-0 z-50 bg-card shadow-sm">
@@ -59,7 +63,7 @@ export default function ServicesPage() {
                     <Link href="/contact" className="text-muted-foreground hover:text-primary">Contact</Link>
                   </nav>
                   <div className="flex items-center gap-2">
-                    <Button variant="outline" size="sm">Login with Google</Button>
+                    <Button variant="outline" size="sm" onClick={handleGoogleSignIn} disabled={loading}>Login with Google</Button>
                     <Button size="sm" asChild><Link href="/login">Login / Sign Up</Link></Button>
                   </div>
                 </div>

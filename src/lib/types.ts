@@ -27,6 +27,13 @@ export type Admin = User & {
   role: 'admin';
 };
 
+export type AppUser = {
+    uid: string;
+    email: string | null;
+    displayName: string | null;
+    role: UserRole;
+}
+
 export type Appointment = {
   id: string;
   patientId: string;
