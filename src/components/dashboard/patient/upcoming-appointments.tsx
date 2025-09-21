@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import type { Appointment } from "@/lib/types";
 import { Calendar, Clock, User } from "lucide-react";
+import { format } from "date-fns";
 
 type UpcomingAppointmentsProps = {
   appointments: Appointment[];
@@ -27,7 +28,7 @@ export function UpcomingAppointments({ appointments, getPractitionerName }: Upco
                 </div>
                 <div className="flex items-center text-sm text-muted-foreground">
                     <Calendar className="w-4 h-4 mr-2" />
-                    <span>{new Date(apt.date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                    <span>{format(new Date(apt.date), "EEEE, MMMM do, yyyy")}</span>
                 </div>
                 <div className="flex items-center text-sm text-muted-foreground">
                     <Clock className="w-4 h-4 mr-2" />

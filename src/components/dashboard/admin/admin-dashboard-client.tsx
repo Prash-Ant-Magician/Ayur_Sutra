@@ -128,7 +128,7 @@ export function AdminDashboardClient({
                         <TableRow key={apt.id}>
                           <TableCell>{getPatientName(apt.patientId)}</TableCell>
                           <TableCell>{getPractitionerName(apt.practitionerId)}</TableCell>
-                          <TableCell>{format(new Date(apt.date), "MMM dd, hh:mm a")}</TableCell>
+                          <TableCell>{format(new Date(apt.date), "MMM dd")} {apt.time}</TableCell>
                           <TableCell>
                             <Button variant="link" className="text-primary p-0 h-auto">Reschedule</Button>
                           </TableCell>

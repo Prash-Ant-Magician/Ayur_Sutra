@@ -3,6 +3,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import type { Appointment } from "@/lib/types";
 import { Calendar, CheckCircle } from "lucide-react";
+import { format } from "date-fns";
 
 type PastAppointmentsProps = {
   appointments: Appointment[];
@@ -24,7 +25,7 @@ export function PastAppointments({ appointments, getPractitionerName }: PastAppo
               <div>
                 <p className="font-semibold">{apt.therapyType}</p>
                 <p className="text-muted-foreground">
-                  {new Date(apt.date).toLocaleDateString()} with Dr. {getPractitionerName(apt.practitionerId)}
+                  {format(new Date(apt.date), "PPP")} with Dr. {getPractitionerName(apt.practitionerId)}
                 </p>
               </div>
             </div>
