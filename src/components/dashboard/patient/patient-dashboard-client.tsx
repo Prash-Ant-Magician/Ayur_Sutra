@@ -3,17 +3,26 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { TherapyProgressChart } from "./therapy-progress-chart";
 import { UpcomingAppointments } from "./upcoming-appointments";
-import type { Appointment, TherapyProgress } from "@/lib/types";
+import type { Appointment, TherapyProgress, Practitioner } from "@/lib/types";
+import { PastAppointments } from "./past-appointments";
 
 type PatientDashboardClientProps = {
   therapyProgress: TherapyProgress[];
-  appointments: Appointment[];
+  upcomingAppointments: Appointment[];
+  pastAppointments: Appointment[];
+  practitioners: Practitioner[];
 };
 
-export function PatientDashboardClient({ therapyProgress, appointments }: PatientDashboardClientProps) {
+export function PatientDashboardClient({ therapyProgress, upcomingAppointments, pastAppointments, practitioners }: PatientDashboardClientProps) {
+  
+  const getPractitionerName = (practitionerId: string) => {
+    return practitioners.find(p => p.id === practitionerId)?.name || "N/A";
+  };
+
   return (
     <div className="grid gap-8 lg:grid-cols-3">
-      <div className="lg:col-span-2">
+      <div className="lg:col-span-2 space-y-8">
+        <UpcomingAppointments appointments={upcomingAppointments} getPractitionerName={getPractitionerName} />
         <Card>
           <CardHeader>
             <CardTitle className="font-headline">Therapy Progress</CardTitle>
@@ -25,7 +34,7 @@ export function PatientDashboardClient({ therapyProgress, appointments }: Patien
         </Card>
       </div>
       <div className="lg:col-span-1">
-        <UpcomingAppointments appointments={appointments} />
+        <PastAppointments appointments={pastAppointments} getPractitionerName={getPractitionerName} />
       </div>
     </div>
   );
