@@ -1,35 +1,50 @@
+
 "use client";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
-import { Line, LineChart, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts";
+import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import { Area, AreaChart, ResponsiveContainer, XAxis, YAxis, CartesianGrid } from "recharts";
+import type { TherapyProgress } from "@/lib/types";
+import { format } from "date-fns";
 
-export function PatientProgressChart({ patient }: { patient: any }) {
-  const data = [
-    { month: "January", painLevel: 8 },
-    { month: "February", painLevel: 7 },
-    { month: "March", painLevel: 6 },
-    { month: "April", painLevel: 5 },
-    { month: "May", painLevel: 4 },
-    { month: "June", painLevel: 3 },
-  ];
+const chartConfig = {
+  painLevel: { label: "Pain Level", color: "hsl(var(--chart-2))" },
+  mobilityScore: { label: "Mobility", color: "hsl(var(--chart-1))" },
+  wellbeing: { label: "Well-being", color: "hsl(var(--chart-3))" },
+} satisfies ChartConfig;
+
+export function PatientProgressChart({ data }: { data: TherapyProgress[] }) {
+  const formattedData = data.map(item => ({
+    ...item,
+    date: format(new Date(item.date), "MMM d"),
+  }));
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Pain Level Over Time</CardTitle>
-        <CardDescription>Monthly progress of patient's pain level.</CardDescription>
+        <CardTitle>Patient Progress Over Time</CardTitle>
+        <CardDescription>Real-time tracking of key wellness metrics.</CardDescription>
       </CardHeader>
       <CardContent>
-        <ResponsiveContainer width="100%" height={300}>
-          <LineChart data={data}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="month" />
-            <YAxis />
-            <ChartTooltip content={<ChartTooltipContent />} />
-            <Line type="monotone" dataKey="painLevel" stroke="#8884d8" />
-          </LineChart>
-        </ResponsiveContainer>
+        {formattedData.length > 0 ? (
+          <ChartContainer config={chartConfig} className="min-h-[300px] w-full">
+            <ResponsiveContainer width="100%" height={300}>
+              <AreaChart data={formattedData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="date" />
+                <YAxis domain={[0, 10]}/>
+                <ChartTooltip content={<ChartTooltipContent indicator="dot" />} />
+                <Area dataKey="painLevel" type="monotone" stroke="var(--color-painLevel)" fill="var(--color-painLevel)" fillOpacity={0.3} />
+                <Area dataKey="mobilityScore" type="monotone" stroke="var(--color-mobilityScore)" fill="var(--color-mobilityScore)" fillOpacity={0.3} />
+                <Area dataKey="wellbeing" type="monotone" stroke="var(--color-wellbeing)" fill="var(--color-wellbeing)" fillOpacity={0.3} />
+              </AreaChart>
+            </ResponsiveContainer>
+          </ChartContainer>
+        ) : (
+          <div className="text-center text-muted-foreground py-16">
+            <p>No progress has been logged for this patient yet.</p>
+          </div>
+        )}
       </CardContent>
     </Card>
   );

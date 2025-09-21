@@ -1,12 +1,12 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
 import { auth, db } from "@/lib/firebase";
 import { onAuthStateChanged, User } from "firebase/auth";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs, query, where, orderBy } from "firebase/firestore";
 import { PatientDashboardClient } from "@/components/dashboard/patient/patient-dashboard-client";
 import { Appointment, Practitioner, TherapyProgress } from "@/lib/types";
-import { therapyProgressData } from "@/lib/data";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { useAuth } from "@/context/auth-context";
@@ -16,6 +16,7 @@ export default function PatientPage() {
   const [upcomingAppointments, setUpcomingAppointments] = useState<Appointment[]>([]);
   const [pastAppointments, setPastAppointments] = useState<Appointment[]>([]);
   const [practitioners, setPractitioners] = useState<Practitioner[]>([]);
+  const [therapyProgress, setTherapyProgress] = useState<TherapyProgress[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -40,6 +41,12 @@ export default function PatientPage() {
         const practitionersSnapshot = await getDocs(practitionersQuery);
         const allPractitioners = practitionersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Practitioner));
         setPractitioners(allPractitioners);
+
+        // Fetch progress data
+        const progressQuery = query(collection(db, `users/${user.uid}/progress_notes`), orderBy("date", "asc"));
+        const progressSnapshot = await getDocs(progressQuery);
+        const progressData = progressSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as TherapyProgress));
+        setTherapyProgress(progressData);
 
         setLoading(false);
       }
@@ -103,7 +110,7 @@ export default function PatientPage() {
     <div className="container mx-auto py-8">
       <h1 className="text-3xl font-bold font-headline mb-8">Welcome back, {user.displayName || 'Patient'}!</h1>
       <PatientDashboardClient 
-        therapyProgress={therapyProgressData} 
+        therapyProgress={therapyProgress} 
         upcomingAppointments={upcomingAppointments} 
         pastAppointments={pastAppointments}
         practitioners={practitioners}

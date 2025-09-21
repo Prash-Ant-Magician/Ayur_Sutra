@@ -1,3 +1,4 @@
+
 export type UserRole = 'patient' | 'practitioner' | 'admin';
 
 export type User = {
@@ -54,8 +55,10 @@ export type Notification = {
 };
 
 export type TherapyProgress = {
-  month: string;
+  id?: string;
+  date: string;
   painLevel: number;
   mobilityScore: number;
   wellbeing: number;
+  notes?: string;
 };
