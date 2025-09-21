@@ -87,7 +87,7 @@ export default function ServicesPage() {
                                     <CardContent>
                                         <p className="text-muted-foreground text-sm mb-4">{service.description}</p>
                                         <Button variant="outline" asChild>
-                                            <Link href="/dashboard/patient/schedule">Book Now</Link>
+                                            <Link href="/book-appointment">Book Now</Link>
                                         </Button>
                                     </CardContent>
                                 </Card>

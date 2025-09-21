@@ -88,8 +88,8 @@ export default function Home() {
                 <p className="mt-4 max-w-lg text-lg">
                     Effortlessly manage your Ayurvedic treatments and appointments.
                 </p>
-                <Button size="lg" className="mt-8 bg-accent text-accent-foreground hover:bg-accent/90">
-                    Schedule Your Therapy
+                <Button size="lg" className="mt-8 bg-accent text-accent-foreground hover:bg-accent/90" asChild>
+                    <Link href="/book-appointment">Schedule Your Therapy</Link>
                 </Button>
             </div>
         </section>
@@ -192,7 +192,7 @@ export default function Home() {
             </div>
             <div className="md:col-span-2 text-right">
                  <Button asChild className="bg-accent text-accent-foreground hover:bg-accent/90">
-                    <Link href="/dashboard/patient/schedule">
+                    <Link href="/book-appointment">
                        Schedule an Appointment <ArrowRight className="ml-2"/>
                     </Link>
                  </Button>
