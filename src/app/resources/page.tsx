@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-reload";
+import { ArrowRight } from "lucide-react";
 import { PublicPageHeader } from "@/components/layout/public-page-header";
 
 export default async function ResourcesPage() {
