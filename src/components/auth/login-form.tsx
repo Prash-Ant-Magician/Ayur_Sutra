@@ -26,7 +26,7 @@ import { Loader2 } from "lucide-react";
 
 const emailSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email." }),
-  password: z.string().min(8, { message: "Password cannot be empty." }),
+  password: z.string().min(1, { message: "Password cannot be empty." }),
 });
 
 const phoneSchema = z.object({
@@ -192,17 +192,6 @@ export function LoginForm() {
                     </FormItem>
                     )}
                 />
-                 <p className="text-sm text-muted-foreground pt-2">
-                    <strong>Demo logins:</strong>
-                    <br />
-                    Patient: <code className="font-mono">alice@example.com</code>
-                    <br />
-                    Practitioner: <code className="font-mono">e.reed@ayursutra.com</code>
-                    <br />
-                    Admin: <code className="font-mono">admin@ayursutra.com</code>
-                    <br />
-                    Password for all is <code className="font-mono">password123</code>.
-                    </p>
                 <Button type="submit" className="w-full" disabled={loading}>
                     {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                     Login with Email
