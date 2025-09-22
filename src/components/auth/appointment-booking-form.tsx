@@ -304,7 +304,7 @@ export function AppointmentBookingForm() {
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select location" />
-                  </Trigger>
+                  </SelectTrigger>
                 </FormControl>
                 <SelectContent>
                   <SelectItem value="harmony-city">Harmony City</SelectItem>
@@ -325,7 +325,7 @@ export function AppointmentBookingForm() {
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select therapy" />
-                  </Trigger>
+                  </SelectTrigger>
                 </FormControl>
                 <SelectContent>
                     <SelectItem value="Abhyanga">Abhyanga</SelectItem>
@@ -388,7 +388,7 @@ export function AppointmentBookingForm() {
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select a time slot" />
-                  </Trigger>
+                  </SelectTrigger>
                 </FormControl>
                 <SelectContent>
                   {timeSlots.map(time => (
